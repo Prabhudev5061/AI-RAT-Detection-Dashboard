@@ -1,4 +1,4 @@
-﻿name: CI Test Suite
+name: CI Test Suite
 
 on:
   push:
@@ -33,5 +33,7 @@ jobs:
 
       - name: Run Core Test Suite
         working-directory: Core
+        env:
+          PYTHONPATH: .
         run: |
-          pytest tests/ -v --tb=short
+          python -m pytest tests/ -v --tb=short
