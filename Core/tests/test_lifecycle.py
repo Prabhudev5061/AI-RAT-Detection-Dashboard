@@ -1,4 +1,4 @@
-﻿"""
+"""
 Unit tests for Telemetry Lifecycle, Threading, and Clean Shutdown.
 Validates thread creation, idempotent start/stop, snapshot caching, and robust error fallbacks.
 """

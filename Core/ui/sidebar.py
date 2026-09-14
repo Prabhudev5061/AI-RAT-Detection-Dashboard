@@ -25,10 +25,10 @@ def render_sidebar() -> str:
                     🛡️
                 </div>
                 <div>
-                    <div style="font-weight:700; font-size:1.02rem; color:#f8fafc; letter-spacing: -0.3px;">
+                    <div style="font-weight:700; font-size:1.02rem; color:var(--text-primary); letter-spacing: -0.3px;">
                         AI RAT Detection Dashboard
                     </div>
-                    <div style="font-size:0.68rem; color:#94a3b8;">
+                    <div style="font-size:0.68rem; color:var(--text-muted);">
                         Real-Time Cyber Security Monitoring
                     </div>
                 </div>
@@ -40,16 +40,16 @@ def render_sidebar() -> str:
         # Admin Badge
         admin_mode = is_admin()
         badge_text = "🛡️ Elevated (Admin)" if admin_mode else "⚠️ Standard User"
-        badge_color = "#34d399" if admin_mode else "#facc15"
+        badge_color = "var(--accent-green)" if admin_mode else "var(--accent-yellow)"
         st.markdown(
             f"""
             <div style="
-                background: #111827; border: 1px solid #1f293d;
+                background: var(--card-bg); border: 1px solid var(--card-border);
                 border-radius: 6px; padding: 6px 10px; margin-bottom: 1.2rem;
                 font-size: 0.75rem; color: {badge_color}; font-weight: 600;
                 display: flex; justify-content: space-between; align-items: center;
             ">
-                <span>Privilege Mode</span>
+                <span style="color:var(--text-secondary);">Privilege Mode</span>
                 <span>{badge_text}</span>
             </div>
             """,

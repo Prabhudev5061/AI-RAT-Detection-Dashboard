@@ -88,8 +88,8 @@ The application supports three display themes:
 - **System Default**: Automatically syncs with your Windows system preference (light or dark).
 
 ### How to Switch Themes:
-1. **From the Sidebar**: Locate the **ðŸŽ¨ UI Theme** dropdown in the navigation sidebar and select `Dark`, `Light`, or `System`.
-2. **From Settings**: Navigate to **Settings** in the sidebar, choose your desired theme under **Appearance & Interface**, and click **ðŸ’¾ Save Preferences**.
+1. **From the Sidebar**: Locate the **🎨 UI Theme** dropdown in the navigation sidebar and select `Dark`, `Light`, or `System`.
+2. **From Settings**: Navigate to **Settings** in the sidebar, choose your desired theme under **Appearance & Interface**, and click **💾 Save Preferences**.
 3. All UI cards, sparklines, Plotly telemetry history graphs, and tables instantly adapt to the selected theme. Your choice is automatically persisted in `data/settings.json`.
 
 ---
@@ -126,7 +126,7 @@ The left sidebar provides one-click access to the main security modules:
 - **Active Network Connections**: Shows current TCP/UDP sockets and remote IPs.
 - **Suspicious Port Detection**: Flags any socket bound to known RAT or backdoor ports.
 - **Security Status**: Defensive sensor auditing for Camera, Microphone, Screen Recording, and Remote Administration Tools.
-- **AI Prediction**: Rule-based threat verdict with circular risk score gauge (0â€“100%).
+- **AI Prediction**: Rule-based threat verdict with circular risk score gauge (0–100%).
 - **Event Timeline**: Recent security events categorized by severity.
 - **AI Recommendations**: Actionable security hardening steps tailored to detected conditions.
 
@@ -138,10 +138,10 @@ The risk engine computes an explainable score between **0 and 100**:
 
 | Level | Score Range | Color | Meaning |
 | :--- | :--- | :--- | :--- |
-| **LOW** | 0 â€“ 24 | Emerald Green | Clean system behavior; routine background processes. |
-| **MEDIUM** | 25 â€“ 49 | Yellow / Amber | Minor anomalies, high resource bursts, or remote tool activity. |
-| **HIGH** | 50 â€“ 74 | Orange | Suspicious paths (e.g. Temp/AppData), unknown backdoors, or anomalous spawns. |
-| **CRITICAL** | 75 â€“ 100 | Vivid Red | Multiple compounded indicators or known RAT communication ports. |
+| **LOW** | 0 – 24 | Emerald Green | Clean system behavior; routine background processes. |
+| **MEDIUM** | 25 – 49 | Yellow / Amber | Minor anomalies, high resource bursts, or remote tool activity. |
+| **HIGH** | 50 – 74 | Orange | Suspicious paths (e.g. Temp/AppData), unknown backdoors, or anomalous spawns. |
+| **CRITICAL** | 75 – 100 | Vivid Red | Multiple compounded indicators or known RAT communication ports. |
 
 > **Transparency Note**: The dashboard never makes unsubstantiated claims. Every elevated score includes specific forensic reasons (e.g., *Executable located in AppData\Local\Temp*).
 
@@ -184,25 +184,25 @@ Navigate to **Event Logs**:
 
 ## 12. Generating & Exporting Reports (CSV & PDF)
 Navigate to **Reports**:
-1. **Executive PDF Report**: Click **Generate & Download PDF Report**. The application generates a publication-ready PDF document including threat scores, active process lists, suspicious ports, and recommendations. Once generated, click **â¬‡ï¸ Download Generated PDF**.
-2. **Metrics CSV Export**: Click **â¬‡ï¸ Export Metrics History (CSV)** to download historical hardware telemetry.
-3. **Events CSV Export**: Click **â¬‡ï¸ Export Event Logs (CSV)** to download the complete event log.
+1. **Executive PDF Report**: Click **Generate & Download PDF Report**. The application generates a publication-ready PDF document including threat scores, active process lists, suspicious ports, and recommendations. Once generated, click **⬇️ Download Generated PDF**.
+2. **Metrics CSV Export**: Click **⬇️ Export Metrics History (CSV)** to download historical hardware telemetry.
+3. **Events CSV Export**: Click **⬇️ Export Event Logs (CSV)** to download the complete event log.
 
 ---
 
 ## 13. Application Settings & Refresh Intervals
 Navigate to **Settings**:
 - Adjust the **Auto Refresh Interval** (default is 5 seconds).
-- Click **ðŸ§¹ Prune Historical Database Records** to clean older telemetry entries while preserving recent records.
+- Click **🧹 Prune Historical Database Records** to clean older telemetry entries while preserving recent records.
 
 ---
 
 ## 14. Administrator Permissions & Elevation
-- When started as a standard user, the dashboard displays **âš ï¸ Standard User** in the sidebar. Standard monitoring functions normally, but certain core Windows processes (e.g., PID 4 `System`, `svchost.exe`) will display `[Access Denied (Requires Admin)]` for their binary path.
+- When started as a standard user, the dashboard displays **⚠️ Standard User** in the sidebar. Standard monitoring functions normally, but certain core Windows processes (e.g., PID 4 `System`, `svchost.exe`) will display `[Access Denied (Requires Admin)]` for their binary path.
 - To enable complete inspection of all system processes:
   1. Right-click PowerShell and choose **Run as Administrator**.
   2. Start the dashboard from that elevated terminal.
-  3. The sidebar will indicate **ðŸ›¡ï¸ Elevated (Admin)**.
+  3. The sidebar will indicate **🛡️ Elevated (Admin)**.
 
 ---
 

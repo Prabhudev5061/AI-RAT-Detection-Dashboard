@@ -57,7 +57,7 @@ def render_metric_cards(
         cpu_val = metrics.get("cpu_percent", 0.0)
         st.markdown(
             f"""
-            <div class="cyber-card">
+            <div class="cyber-card" style="margin-bottom: 0px;">
                 <div class="card-title-row">
                     <span class="card-title">🖥️ CPU Usage</span>
                 </div>
@@ -74,7 +74,7 @@ def render_metric_cards(
         ram_val = metrics.get("memory_percent", 0.0)
         st.markdown(
             f"""
-            <div class="cyber-card">
+            <div class="cyber-card" style="margin-bottom: 0px;">
                 <div class="card-title-row">
                     <span class="card-title">💾 RAM Usage</span>
                 </div>
@@ -91,7 +91,7 @@ def render_metric_cards(
         disk_val = metrics.get("disk_percent", 0.0)
         st.markdown(
             f"""
-            <div class="cyber-card">
+            <div class="cyber-card" style="margin-bottom: 0px;">
                 <div class="card-title-row">
                     <span class="card-title">🗄️ Disk Usage</span>
                 </div>
@@ -108,7 +108,7 @@ def render_metric_cards(
         proc_val = metrics.get("total_processes", 0)
         st.markdown(
             f"""
-            <div class="cyber-card">
+            <div class="cyber-card" style="margin-bottom: 0px;">
                 <div class="card-title-row">
                     <span class="card-title">⚙️ Total Processes</span>
                 </div>

@@ -1,4 +1,4 @@
-﻿"""
+"""
 AI RAT Detection Dashboard - Permissions Utilities
 Handles Administrator/root privilege detection and logged-in user identification.
 Cross-platform support via platform_adapter.

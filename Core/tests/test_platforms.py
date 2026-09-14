@@ -1,4 +1,4 @@
-﻿"""
+"""
 Unit tests for the cross-platform platform abstraction layer.
 Validates Windows, Linux, and Base platform adapters.
 """

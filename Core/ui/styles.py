@@ -188,6 +188,19 @@ def get_theme_css(theme: str = "dark") -> str:
         color: var(--app-text) !important;
     }}
 
+    /* Tighten top container padding and allow responsive full-width layout */
+    .block-container {{
+        padding-top: 1.2rem !important;
+        padding-bottom: 2rem !important;
+        padding-left: 2rem !important;
+        padding-right: 2rem !important;
+        max-width: 100% !important;
+    }}
+
+    h1, h2, h3, h4, h5, h6 {{
+        color: var(--text-primary) !important;
+    }}
+
     /* Sidebar styling */
     section[data-testid="stSidebar"] {{
         background-color: var(--sidebar-bg) !important;
@@ -195,7 +208,7 @@ def get_theme_css(theme: str = "dark") -> str:
     }}
 
     section[data-testid="stSidebar"] div[data-testid="stSidebarUserContent"] {{
-        padding-top: 1.5rem;
+        padding-top: 1.2rem;
     }}
 
     /* Custom Card Container */
@@ -203,8 +216,8 @@ def get_theme_css(theme: str = "dark") -> str:
         background: var(--card-bg);
         border: 1px solid var(--card-border);
         border-radius: 12px;
-        padding: 16px 18px;
-        margin-bottom: 16px;
+        padding: 14px 16px;
+        margin-bottom: 14px;
         box-shadow: var(--card-shadow);
         position: relative;
         overflow: hidden;
@@ -292,6 +305,7 @@ def get_theme_css(theme: str = "dark") -> str:
         border-spacing: 0;
         font-size: 0.8rem;
         color: var(--text-secondary);
+        table-layout: fixed;
     }}
 
     .cyber-table th {{
@@ -302,6 +316,9 @@ def get_theme_css(theme: str = "dark") -> str:
         font-weight: 600;
         font-size: 0.75rem;
         border-bottom: 1px solid var(--table-border);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }}
 
     .cyber-table td {{
@@ -309,6 +326,9 @@ def get_theme_css(theme: str = "dark") -> str:
         border-bottom: 1px solid var(--table-border);
         font-family: 'JetBrains Mono', monospace;
         font-size: 0.76rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }}
 
     .cyber-table tr:hover td {{

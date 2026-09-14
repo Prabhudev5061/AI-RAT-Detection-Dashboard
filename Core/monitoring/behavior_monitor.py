@@ -1,4 +1,4 @@
-﻿"""
+"""
 AI RAT Detection Dashboard - Defensive Behavior & Security Status Monitor
 Monitors host security sensors: Camera, Microphone, Screen Recording, and Remote Access.
 Cross-platform support across Windows and Linux.

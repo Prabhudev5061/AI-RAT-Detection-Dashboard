@@ -1,4 +1,4 @@
-﻿"""
+"""
 AI-RAT-Detection-Dashboard - Dashboard & Subpage Views
 Implements each navigation page with rich, interactive, real-time cyber security components.
 """
@@ -33,10 +33,10 @@ def render_dashboard_header(last_updated: str, refresh_interval: int):
         st.markdown(
             f"""
             <div style="margin-bottom: 1.2rem;">
-                <h2 style="margin:0; font-size:1.65rem; font-weight:800; color:#f8fafc; letter-spacing:-0.5px;">
+                <h2 style="margin:0; font-size:1.65rem; font-weight:800; color:var(--text-primary); letter-spacing:-0.5px;">
                     {APP_TITLE}
                 </h2>
-                <div style="font-size:0.82rem; color:#94a3b8; margin-top:2px;">
+                <div style="font-size:0.82rem; color:var(--text-muted); margin-top:2px;">
                     {APP_SUBTITLE}
                 </div>
             </div>
@@ -48,16 +48,16 @@ def render_dashboard_header(last_updated: str, refresh_interval: int):
             f"""
             <div style="display:flex; justify-content:flex-end; align-items:center; gap:12px; margin-top:6px;">
                 <div style="
-                    background:#111827; border:1px solid #1f293d; border-radius:8px;
-                    padding:6px 12px; font-size:0.75rem; color:#94a3b8; font-family:'JetBrains Mono', monospace;
+                    background:var(--card-bg); border:1px solid var(--card-border); border-radius:8px;
+                    padding:6px 12px; font-size:0.75rem; color:var(--text-secondary); font-family:'JetBrains Mono', monospace;
                 ">
-                    ðŸ•’ Last Updated: <b style="color:#cbd5e1;">{last_updated}</b>
+                    🕒 Last Updated: <b style="color:var(--text-primary);">{last_updated}</b>
                 </div>
                 <div style="
-                    background:rgba(52, 211, 153, 0.12); border:1px solid rgba(52, 211, 153, 0.3);
-                    border-radius:8px; padding:6px 12px; font-size:0.75rem; color:#34d399; font-weight:600;
+                    background:var(--badge-safe-bg); border:1px solid var(--badge-safe-border);
+                    border-radius:8px; padding:6px 12px; font-size:0.75rem; color:var(--badge-safe-text); font-weight:600;
                 ">
-                    ðŸŸ¢ AI Engine Active | {refresh_interval}s
+                    🟢 AI Engine Active | {refresh_interval}s
                 </div>
             </div>
             """,
@@ -113,7 +113,7 @@ def render_dashboard_view(data: Dict[str, Any], recent_metrics: List[Dict[str, A
 
 def render_live_monitor_view(data: Dict[str, Any], recent_metrics: List[Dict[str, Any]]):
     """Detailed high-frequency hardware and system live monitoring view."""
-    st.markdown("### âš¡ Live System & Resource Telemetry")
+    st.markdown("### ⚡ Live System & Resource Telemetry")
     st.markdown("Real-time streaming telemetry with bandwidth throughput and resource allocation.")
 
     metrics = data.get("metrics", {})
@@ -136,7 +136,7 @@ def render_live_monitor_view(data: Dict[str, Any], recent_metrics: List[Dict[str
         st.markdown(
             f"""
             <div class="cyber-card">
-                <div class="card-title">ðŸ’¾ RAM Memory Allocation</div>
+                <div class="card-title">💾 RAM Memory Allocation</div>
                 <div style="margin-top:10px; font-family:'JetBrains Mono', monospace; font-size:0.85rem;">
                     <div>Used: <b>{metrics.get('memory_used', 0) / (1024**3):.2f} GB</b></div>
                     <div>Total: <b>{metrics.get('memory_total', 0) / (1024**3):.2f} GB</b></div>
@@ -150,7 +150,7 @@ def render_live_monitor_view(data: Dict[str, Any], recent_metrics: List[Dict[str
         st.markdown(
             f"""
             <div class="cyber-card">
-                <div class="card-title">ðŸ—„ï¸ Primary Storage Allocation</div>
+                <div class="card-title">🗄️ Primary Storage Allocation</div>
                 <div style="margin-top:10px; font-family:'JetBrains Mono', monospace; font-size:0.85rem;">
                     <div>Used: <b>{metrics.get('disk_used', 0) / (1024**3):.2f} GB</b></div>
                     <div>Total: <b>{metrics.get('disk_total', 0) / (1024**3):.2f} GB</b></div>
@@ -179,7 +179,7 @@ def render_live_monitor_view(data: Dict[str, Any], recent_metrics: List[Dict[str
         st.markdown(
             f"""
             <div class="cyber-card">
-                <div class="card-title">ðŸŽ® GPU Graphics Telemetry</div>
+                <div class="card-title">🎮 GPU Graphics Telemetry</div>
                 <div style="margin-top:10px; font-family:'JetBrains Mono', monospace; font-size:0.85rem;">
                     {gpu_status_html}
                 </div>
@@ -191,14 +191,14 @@ def render_live_monitor_view(data: Dict[str, Any], recent_metrics: List[Dict[str
 
 def render_process_analysis_view(data: Dict[str, Any]):
     """Detailed process inventory and forensic analysis view."""
-    st.markdown("### ðŸ” Process Behavioral Analysis")
+    st.markdown("### 🔍 Process Behavioral Analysis")
     st.markdown("Audits running executables, identifies anomalous execution paths, and evaluates risk.")
 
     processes = data.get("processes", [])
     flagged = data.get("evaluation", {}).get("flagged_processes", [])
 
     if flagged:
-        st.warning(f"âš ï¸ {len(flagged)} process(es) flagged with elevated risk indicators.")
+        st.warning(f"⚠️ {len(flagged)} process(es) flagged with elevated risk indicators.")
         flagged_df = pd.DataFrame(flagged)[["pid", "name", "risk_score", "risk_level", "reasons"]]
         st.dataframe(flagged_df, use_container_width=True)
 
@@ -223,14 +223,14 @@ def render_process_analysis_view(data: Dict[str, Any]):
 
 def render_network_monitor_view(data: Dict[str, Any]):
     """Deep network socket auditing view."""
-    st.markdown("### ðŸŒ Network Socket & Connection Auditing")
+    st.markdown("### 🌐 Network Socket & Connection Auditing")
     st.markdown("Surfaces all active TCP and UDP sockets with correlated process identifiers.")
 
     conns = data.get("connections", [])
     suspicious = data.get("suspicious_ports", [])
 
     if suspicious:
-        st.error(f"ðŸš¨ {len(suspicious)} connection(s) associated with known suspicious/RAT ports!")
+        st.error(f"🚨 {len(suspicious)} connection(s) associated with known suspicious/RAT ports!")
         st.dataframe(pd.DataFrame(suspicious), use_container_width=True)
 
     st.markdown("#### Active Sockets Table")
@@ -251,7 +251,7 @@ def render_network_monitor_view(data: Dict[str, Any]):
 
 def render_security_tools_view(data: Dict[str, Any]):
     """Defensive security tools and diagnostic audits."""
-    st.markdown("### ðŸ› ï¸ Defensive Security Tools & Diagnostic Audit")
+    st.markdown("### 🛡️ Defensive Security Tools & Diagnostic Audit")
     st.markdown("Specialized inspection tools for host hardening, registry startup, and privilege validation.")
 
     t1, t2, t3 = st.tabs(["Startup Programs Audit", "Sensor Privacy Telemetry", "Host Diagnostics"])
@@ -284,7 +284,7 @@ def render_security_tools_view(data: Dict[str, Any]):
 
 def render_event_logs_view(data: Dict[str, Any]):
     """Historical security events and audit log view."""
-    st.markdown("### ðŸ“œ Security Audit & Event Logs")
+    st.markdown("### 📜 Security Audit & Event Logs")
     st.markdown("Chronological forensic event log stored in local SQLite database.")
 
     col1, col2 = st.columns([2, 1])
@@ -305,7 +305,7 @@ def render_event_logs_view(data: Dict[str, Any]):
 
 def render_reports_view(data: Dict[str, Any]):
     """Export and reporting center for CSV and PDF reports."""
-    st.markdown("### ðŸ“Š Forensic Reports & Data Exports")
+    st.markdown("### 📊 Forensic Reports & Data Exports")
     st.markdown("Export comprehensive telemetry dumps and formatted executive PDF reports.")
 
     col1, col2 = st.columns(2)
@@ -314,7 +314,7 @@ def render_reports_view(data: Dict[str, Any]):
         st.markdown(
             """
             <div class="cyber-card">
-                <div class="card-title">ðŸ“„ Executive PDF Security Report</div>
+                <div class="card-title">📄 Executive PDF Security Report</div>
                 <div class="card-subtitle">Formatted PDF report with threat scoring, process lists, and audit findings.</div>
             """,
             unsafe_allow_html=True,
@@ -332,7 +332,7 @@ def render_reports_view(data: Dict[str, Any]):
 
         if "last_generated_pdf" in st.session_state:
             st.download_button(
-                label=f"â¬‡ï¸ Download {st.session_state['last_generated_pdf']['name']}",
+                label=f"⬇️ Download {st.session_state['last_generated_pdf']['name']}",
                 data=st.session_state["last_generated_pdf"]["bytes"],
                 file_name=st.session_state["last_generated_pdf"]["name"],
                 mime="application/pdf",
@@ -344,14 +344,14 @@ def render_reports_view(data: Dict[str, Any]):
         st.markdown(
             """
             <div class="cyber-card">
-                <div class="card-title">ðŸ“ Raw Data CSV Exports</div>
+                <div class="card-title">📁 Raw Data CSV Exports</div>
                 <div class="card-subtitle">Export telemetry and event log tables in standard CSV format.</div>
             """,
             unsafe_allow_html=True,
         )
         csv_metrics = report_service.generate_csv_metrics()
         st.download_button(
-            label="â¬‡ï¸ Export Metrics History (CSV)",
+            label="⬇️ Export Metrics History (CSV)",
             data=csv_metrics,
             file_name="system_metrics_export.csv",
             mime="text/csv",
@@ -360,7 +360,7 @@ def render_reports_view(data: Dict[str, Any]):
 
         csv_events = report_service.generate_csv_events()
         st.download_button(
-            label="â¬‡ï¸ Export Event Logs (CSV)",
+            label="⬇️ Export Event Logs (CSV)",
             data=csv_events,
             file_name="security_events_export.csv",
             mime="text/csv",
@@ -371,7 +371,7 @@ def render_reports_view(data: Dict[str, Any]):
 
 def render_settings_view():
     """Application configuration and maintenance settings."""
-    st.markdown("### âš™ï¸ Application Settings & Configuration")
+    st.markdown("### ⚙️ Application Settings & Configuration")
     st.markdown("Tune refresh parameters, visual themes, detection thresholds, and database maintenance.")
 
     current_cfg = load_settings()
@@ -381,7 +381,7 @@ def render_settings_view():
         st.markdown(
             """
             <div class="cyber-card">
-                <div class="card-title">ðŸŽ¨ Appearance & Interface</div>
+                <div class="card-title">🎨 Appearance & Interface</div>
             """,
             unsafe_allow_html=True,
         )
@@ -397,7 +397,7 @@ def render_settings_view():
             help="Choose between Dark Cybersecurity SOC, Light Professional, or System default",
         )
 
-        st.markdown("<br><div class='card-title'>â±ï¸ Monitoring Parameters</div>", unsafe_allow_html=True)
+        st.markdown("<br><div class='card-title'>⏱️ Monitoring Parameters</div>", unsafe_allow_html=True)
         current_interval = int(st.session_state.get("setting_refresh_interval", current_cfg.get("refresh_interval", 5)))
         intervals = [3, 5, 10, 15, 30]
         interval_idx = intervals.index(current_interval) if current_interval in intervals else 1
@@ -419,7 +419,7 @@ def render_settings_view():
             key="settings_enable_startup",
         )
 
-        if st.button("ðŸ’¾ Save Preferences", key="btn_save_settings"):
+        if st.button("💾 Save Preferences", key="btn_save_settings"):
             new_theme = selected_theme.lower()
             st.session_state["theme"] = new_theme
             st.session_state["setting_refresh_interval"] = selected_interval
@@ -432,7 +432,7 @@ def render_settings_view():
                 "enable_net": enable_net,
                 "enable_startup": enable_startup,
             })
-            st.success("âœ… Preferences saved successfully! Theme and parameters updated.")
+            st.success("✅ Preferences saved successfully! Theme and parameters updated.")
             st.rerun()
 
         st.markdown("</div>", unsafe_allow_html=True)
@@ -441,7 +441,7 @@ def render_settings_view():
         st.markdown(
             """
             <div class="cyber-card">
-                <div class="card-title">ðŸ—„ï¸ Database & Storage Maintenance</div>
+                <div class="card-title">🗄️ Database & Storage Maintenance</div>
             """,
             unsafe_allow_html=True,
         )
@@ -449,7 +449,7 @@ def render_settings_view():
         st.write(f"Application Version: `v{APP_VERSION}`")
         st.write("JetBrains Mono Font: `Embedded Offline (Base64)`")
 
-        if st.button("ðŸ§¹ Prune Historical Database Records", key="btn_prune_db"):
+        if st.button("🧹 Prune Historical Database Records", key="btn_prune_db"):
             db.prune_old_data(max_records=500)
             st.success("Database pruned to latest 500 records.")
         st.markdown("</div>", unsafe_allow_html=True)
@@ -459,7 +459,7 @@ def render_settings_view():
     st.markdown(
         f"""
         <div class="cyber-card">
-            <div class="card-title">â„¹ï¸ About AI RAT Detection Dashboard</div>
+            <div class="card-title">ℹ️ About AI RAT Detection Dashboard</div>
             <div style="margin-top: 10px; font-size: 0.85rem; line-height: 1.6;">
                 <div><b>Application:</b> AI RAT Detection Dashboard</div>
                 <div><b>Version:</b> v{APP_VERSION} (Production Release)</div>

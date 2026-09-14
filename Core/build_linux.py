@@ -1,4 +1,4 @@
-﻿"""
+"""
 AI RAT Detection Dashboard - Linux Packaging Script
 Prepares production Linux deployment packages:
 1. Linux/AppImage/ (AppDir structure, desktop integration, AppRun, build_appimage.sh)

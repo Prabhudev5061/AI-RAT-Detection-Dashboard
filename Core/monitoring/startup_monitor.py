@@ -1,4 +1,4 @@
-﻿"""
+"""
 AI RAT Detection Dashboard - Startup Program Monitor
 Audits system autostart configurations, registry persistence, and desktop autostart directories.
 """

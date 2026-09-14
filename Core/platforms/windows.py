@@ -1,4 +1,4 @@
-﻿"""
+"""
 AI RAT Detection Dashboard - Windows Platform Adapter
 Implements Windows-specific telemetry, registry inspection, GPU querying, and security sensors.
 """

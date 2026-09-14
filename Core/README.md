@@ -1,4 +1,4 @@
-﻿# Core Master Engine — Developer Technical Guide
+# Core Master Engine — Developer Technical Guide
 
 The `Core/` directory is the **SINGLE MASTER SOURCE CODEBASE** for the AI RAT Detection Dashboard. All features, threat detection heuristics, telemetry collectors, and platform adapters reside here. The `Windows/` and `Linux/` directories are release distributions generated from this master source.
 

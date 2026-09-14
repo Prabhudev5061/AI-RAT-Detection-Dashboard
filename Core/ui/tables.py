@@ -19,11 +19,11 @@ def render_top_processes_card(top_processes: List[Dict[str, Any]]):
         rows_html += f"<tr><td class='accent-blue' style='font-weight:600;'>{pname}</td><td>{pid}</td><td>{cpu}%</td><td>{mem}%</td></tr>"
 
     html = (
-        "<div class='cyber-card'>"
+        "<div class='cyber-card' style='min-height: 250px;'>"
         "<div class='card-title'>⚙️ Top Active Processes</div>"
         "<div class='card-subtitle'>Real-time list of the most CPU-intensive processes</div>"
         "<table class='cyber-table'>"
-        "<thead><tr><th>Process</th><th>PID</th><th>CPU (%)</th><th>Memory (%)</th></tr></thead>"
+        "<thead><tr><th style='width:38%;'>Process</th><th style='width:20%;'>PID</th><th style='width:21%;'>CPU (%)</th><th style='width:21%;'>Memory (%)</th></tr></thead>"
         f"<tbody>{rows_html}</tbody>"
         "</table>"
         "</div>"
@@ -41,11 +41,11 @@ def render_startup_programs_card(startup_items: List[Dict[str, Any]]):
         rows_html += f"<tr><td class='accent-purple' style='font-weight:500;'>{name}</td><td style='color:var(--text-muted); font-size:0.7rem;'>{loc}</td></tr>"
 
     html = (
-        "<div class='cyber-card'>"
+        "<div class='cyber-card' style='min-height: 250px;'>"
         "<div class='card-title'>🚀 Startup Programs</div>"
         "<div class='card-subtitle'>Applications configured to launch automatically when Windows starts</div>"
         "<table class='cyber-table'>"
-        "<thead><tr><th>Startup Program</th><th>Location</th></tr></thead>"
+        "<thead><tr><th style='width:45%;'>Startup Program</th><th style='width:55%;'>Location</th></tr></thead>"
         f"<tbody>{rows_html}</tbody>"
         "</table>"
         "</div>"
@@ -64,11 +64,11 @@ def render_parent_child_card(relationships: List[Dict[str, Any]]):
         rows_html += f"<tr><td style='color:var(--text-muted);'>{p_name}</td><td class='accent-yellow' style='font-weight:500;'>{c_name}</td><td>{c_pid}</td></tr>"
 
     html = (
-        "<div class='cyber-card'>"
+        "<div class='cyber-card' style='min-height: 250px;'>"
         "<div class='card-title'>👥 Parent-Child Process Relationship</div>"
         "<div class='card-subtitle'>Shows which processes launched other processes</div>"
         "<table class='cyber-table'>"
-        "<thead><tr><th>Parent Process</th><th>Child Process</th><th>PID</th></tr></thead>"
+        "<thead><tr><th style='width:40%;'>Parent Process</th><th style='width:40%;'>Child Process</th><th style='width:20%;'>PID</th></tr></thead>"
         f"<tbody>{rows_html}</tbody>"
         "</table>"
         "</div>"
@@ -88,11 +88,11 @@ def render_active_connections_card(connections: List[Dict[str, Any]]):
         rows_html += f"<tr><td>{laddr}</td><td>{raddr}</td><td style='color:{status_color}; font-weight:600;'>{status}</td></tr>"
 
     html = (
-        "<div class='cyber-card'>"
+        "<div class='cyber-card' style='min-height: 250px;'>"
         "<div class='card-title'>🌐 Active Network Connections</div>"
         "<div class='card-subtitle'>Current inbound and outbound network connections</div>"
         "<table class='cyber-table'>"
-        "<thead><tr><th>Local Address</th><th>Remote Address</th><th>Status</th></tr></thead>"
+        "<thead><tr><th style='width:40%;'>Local Address</th><th style='width:40%;'>Remote Address</th><th style='width:20%;'>Status</th></tr></thead>"
         f"<tbody>{rows_html}</tbody>"
         "</table>"
         "</div>"
@@ -114,11 +114,11 @@ def render_suspicious_ports_card(suspicious_ports: List[Dict[str, Any]]):
         rows_html = "<tr><td colspan='3' style='text-align:center; color:var(--accent-green); padding: 18px 0;'>✓ No active sockets bound to known high-risk RAT ports</td></tr>"
 
     html = (
-        "<div class='cyber-card'>"
+        "<div class='cyber-card' style='min-height: 250px;'>"
         "<div class='card-title'>⚠️ Suspicious Port Detection</div>"
         "<div class='card-subtitle'>Identifies commonly abused ports for RAT communication</div>"
         "<table class='cyber-table'>"
-        "<thead><tr><th>Port</th><th>Process</th><th>Risk Level</th></tr></thead>"
+        "<thead><tr><th style='width:25%;'>Port</th><th style='width:45%;'>Process</th><th style='width:30%;'>Risk Level</th></tr></thead>"
         f"<tbody>{rows_html}</tbody>"
         "</table>"
         "</div>"
@@ -148,7 +148,7 @@ def render_security_status_card(security_status: Dict[str, Any]):
         )
 
     html = (
-        "<div class='cyber-card'>"
+        "<div class='cyber-card' style='min-height: 250px;'>"
         "<div class='card-title'>🛡️ Security Status</div>"
         "<div class='card-subtitle'>Defensive sensor telemetry and access indicators</div>"
         f"{rows_html}"
@@ -169,7 +169,7 @@ def render_ai_prediction_card(evaluation: Dict[str, Any]):
     headline_color = "var(--accent-green)" if is_safe else "var(--accent-red)"
 
     html = (
-        "<div class='cyber-card' style='min-height: 175px;'>"
+        "<div class='cyber-card' style='min-height: 185px;'>"
         "<div class='card-title'>🧠 AI Prediction & Risk Analysis</div>"
         "<div class='card-subtitle'>Rule-based behavioral threat inference engine</div>"
         "<div style='display: flex; justify-content: space-between; align-items: center; margin-top: 15px;'>"
@@ -204,11 +204,11 @@ def render_event_timeline_card(recent_events: List[Dict[str, Any]]):
         rows_html += f"<tr><td style='color:var(--text-muted); font-size:0.72rem;'>{ts}</td><td style='color:var(--text-primary);'>{desc}</td><td>{badge}</td></tr>"
 
     html = (
-        "<div class='cyber-card' style='min-height: 175px;'>"
+        "<div class='cyber-card' style='min-height: 185px;'>"
         "<div class='card-title'>🕒 Event Timeline</div>"
         "<div class='card-subtitle'>Recent security events and alerts</div>"
         "<table class='cyber-table'>"
-        "<thead><tr><th>Time</th><th>Event</th><th>Severity</th></tr></thead>"
+        "<thead><tr><th style='width:25%;'>Time</th><th style='width:50%;'>Event</th><th style='width:25%;'>Severity</th></tr></thead>"
         f"<tbody>{rows_html}</tbody>"
         "</table>"
         "</div>"
@@ -235,7 +235,7 @@ def render_ai_recommendations_card(recommendations: List[str]):
         )
 
     html = (
-        "<div class='cyber-card' style='min-height: 175px;'>"
+        "<div class='cyber-card' style='min-height: 185px;'>"
         "<div class='card-title'>💡 AI Recommendations</div>"
         "<div class='card-subtitle'>Contextual defensive hardening actions</div>"
         f"<div style='margin-top: 10px;'>{items_html}</div>"
