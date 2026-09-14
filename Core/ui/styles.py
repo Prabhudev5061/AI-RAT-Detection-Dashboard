@@ -399,9 +399,18 @@ def get_theme_css(theme: str = "dark") -> str:
         color: var(--text-primary) !important;
     }}
 
-    /* Hide Streamlit default hamburger menu & footer */
+    /* Hide Streamlit default chrome: header, hamburger menu, decoration, and footer */
     #MainMenu {{visibility: hidden;}}
     footer {{visibility: hidden;}}
+    header[data-testid="stHeader"] {{
+        display: none !important;
+        height: 0px !important;
+        background: transparent !important;
+    }}
+    [data-testid="stDecoration"] {{
+        display: none !important;
+        height: 0px !important;
+    }}
     </style>
     """
 

@@ -99,7 +99,7 @@ def render_sidebar() -> str:
         )
 
         # Live Feed Toggle
-        st.toggle("⚡ Live Auto-Refresh", value=True, key="setting_auto_refresh_enabled", help="Toggle background telemetry updates")
+        st.toggle("⚡ Live Auto-Refresh", key="setting_auto_refresh_enabled", help="Toggle background telemetry updates")
 
         st.markdown("<hr style='border-color: var(--sidebar-border); margin: 0.8rem 0 1rem 0;'>", unsafe_allow_html=True)
 
