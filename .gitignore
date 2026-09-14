@@ -1,0 +1,71 @@
+﻿# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Environments & Virtual Envs
+.venv/
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Testing & Coverage
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.nox/
+
+# Build & PyInstaller Temporary Workspaces
+Core/build/
+Core/dist/
+*.spec
+
+# Unpacked PyInstaller runtime internals (rebuildable via python build_windows.py)
+Windows/Portable/_internal/
+
+# Archives exceeding GitHub 100MB file limit (distribute via GitHub Releases)
+Windows/Portable/*.zip
+
+# Local runtime logs, sqlite databases, and generated reports
+data/*.db
+data/*.sqlite
+data/*.db-wal
+data/*.db-shm
+logs/*.log
+reports/*.csv
+reports/*.pdf
+Windows/Portable/data/*.db
+Windows/Portable/logs/*.log
+Windows/Portable/reports/*.csv
+Windows/Portable/reports/*.pdf
+
+# Keep tracking empty runtime folders via .gitkeep
+!data/.gitkeep
+!logs/.gitkeep
+!reports/.gitkeep
+!Core/data/.gitkeep
+!Core/logs/.gitkeep
+!Core/reports/.gitkeep
+!Windows/Portable/data/.gitkeep
+!Windows/Portable/logs/.gitkeep
+!Windows/Portable/reports/.gitkeep
+
+# IDE and Operating System
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+*.swp
+*.swo
+.env
+
+# Production Release Artifacts (preserves installer & linux packages)
+!Windows/Installer/AI-RAT-Detection-Dashboard-Setup.exe
+!Linux/Debian/ai-rat-detection-dashboard.deb
+!Linux/AppImage/AI-RAT-Detection-Dashboard.AppImage

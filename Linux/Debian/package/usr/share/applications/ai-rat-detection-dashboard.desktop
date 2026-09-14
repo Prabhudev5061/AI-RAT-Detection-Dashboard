@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=AI RAT Detection Dashboard
+Comment=Defensive Cyber Security Telemetry & RAT Detection
+Exec=/usr/bin/ai-rat-detection-dashboard
+Icon=/usr/share/icons/hicolor/256x256/apps/ai-rat-detection-dashboard.png
+Terminal=false
+Categories=Utility;Security;System;

@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=AI RAT Detection Dashboard
+Comment=Real-Time Cyber Security Monitoring and RAT Behavioral Forensics
+Exec=ai-rat-detection-dashboard
+Icon=ai-rat-detection-dashboard
+Terminal=false
+Categories=Utility;Security;System;Monitor;
+Keywords=security;rat;monitor;cyber;threat;
+StartupNotify=true

@@ -1,0 +1,39 @@
+# Python artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Environments
+.venv/
+env/
+venv/
+ENV/
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Local databases, logs, and generated report artifacts
+data/*.db
+data/*.sqlite
+data/*.db-wal
+data/*.db-shm
+logs/*.log
+reports/*.csv
+reports/*.pdf
+
+# Preserve directory structure
+!data/.gitkeep
+!logs/.gitkeep
+!reports/.gitkeep
+
+# Operating System & Editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+.env

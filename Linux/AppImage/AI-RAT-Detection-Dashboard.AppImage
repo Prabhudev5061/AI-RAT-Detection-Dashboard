@@ -1,0 +1,4 @@
+#!/bin/sh
+# AI RAT Detection Dashboard v1.0.0 Standalone Linux Launcher
+DIR="$(dirname "$(readlink -f "$0")")"
+exec "$DIR/AppDir/AppRun" "$@"

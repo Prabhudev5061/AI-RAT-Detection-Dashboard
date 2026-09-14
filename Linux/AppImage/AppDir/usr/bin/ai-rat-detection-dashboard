@@ -1,0 +1,10 @@
+#!/bin/sh
+HERE="$(dirname "$(readlink -f "$0")")"
+APP_SHARE="$HERE/../share/ai-rat-detection-dashboard"
+cd "$APP_SHARE" || exit 1
+if command -v python3 >/dev/null 2>&1; then
+    exec python3 desktop_app.py "$@"
+else
+    echo "Error: python3 is required to run AI RAT Detection Dashboard." >&2
+    exit 1
+fi

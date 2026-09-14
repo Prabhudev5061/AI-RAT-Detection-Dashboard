@@ -1,0 +1,12 @@
+[global]
+developmentMode = false
+
+[server]
+headless = true
+address = "127.0.0.1"
+enableCORS = false
+enableXsrfProtection = false
+
+[browser]
+serverAddress = "127.0.0.1"
+gatherUsageStats = false
