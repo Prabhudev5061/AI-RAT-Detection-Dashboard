@@ -21,6 +21,14 @@ ICONS: Dict[str, str] = {
     "computer": "\uf108",          # alias to desktop
     "terminal": "\uf120",          # nf-fa-terminal
     "home": "\uf015",              # nf-fa-home
+    "chevron_left": "\uf053",      # nf-fa-chevron_left
+    "chevron_right": "\uf054",     # nf-fa-chevron_right
+    "angle_double_left": "\uf100", # nf-fa-angle_double_left
+    "angle_double_right": "\uf101", # nf-fa-angle_double_right
+    "collapse_left": "\uf100",     # alias to angle_double_left
+    "expand_right": "\uf101",      # alias to angle_double_right
+    "arrow_left": "\uf060",        # nf-fa-arrow_left
+    "arrow_right": "\uf061",       # nf-fa-arrow_right
 
     # Hardware & Telemetry
     "cpu": "\uf2db",               # nf-fa-microchip

@@ -71,6 +71,24 @@ def test_sidebar_and_widgets_css_overrides():
     assert 'li[role="option"]' in css
 
 
+def test_sidebar_collapse_button_nerd_font_replacement():
+    """
+    Verifies that Streamlit Material Symbols ligature strings (e.g. keyboard_double_arrow_left)
+    are suppressed with font-size: 0 and color: transparent, and replaced with clean embedded Nerd Font icons.
+    Also verifies broad 'button, button *' override is eliminated.
+    """
+    css = get_theme_css("dracula_dark")
+    assert '[data-testid="stIconMaterial"]' in css
+    assert 'font-size: 0 !important;' in css
+    assert 'color: transparent !important;' in css
+    assert '[data-testid="stSidebarCollapseButton"]' in css
+    assert '[data-testid="stSidebarCollapsedControl"]' in css
+    assert '\\f100' in css
+    assert '\\f101' in css
+    # Ensure overbroad 'button,\n    button *' is not present
+    assert 'button,\n    button *,' not in css
+
+
 def test_light_theme_text_contrast():
     """Verifies all Light themes use dark, high-contrast typography tokens."""
     light_keys = ["white_slur", "gruvbox_light", "windows_xp", "classic_light"]
@@ -121,6 +139,7 @@ def test_centralized_icons_mapping():
         "network", "terminal", "bolt", "clock", "camera", "microphone",
         "screen", "remote", "report", "folder", "download", "save", "palette",
         "chart_line", "chart_bar", "pulse", "startup", "parent_child", "brain",
+        "chevron_left", "chevron_right", "angle_double_left", "angle_double_right",
     ]
 
     for name in critical_icons:

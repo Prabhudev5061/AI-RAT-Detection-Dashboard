@@ -186,6 +186,69 @@ def generate_theme_css(theme_key: str, fonts_css: str = "") -> str:
         padding-top: 1.2rem;
     }}
 
+    /* Universal safeguard: Suppress raw Material Symbol ligature text fallback across the app */
+    [data-testid="stIconMaterial"] {{
+        font-size: 0 !important;
+        line-height: 0 !important;
+        color: transparent !important;
+        user-select: none !important;
+    }}
+
+    /* Sidebar Collapse & Expand Controls: Replace Material ligature text with embedded Nerd Font icon glyphs */
+    [data-testid="stSidebarCollapseButton"] button,
+    [data-testid="stSidebarCollapsedControl"] button {{
+        background-color: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+        cursor: pointer !important;
+        color: var(--text-secondary) !important;
+    }}
+
+    [data-testid="stSidebarCollapseButton"] [data-testid="stIconMaterial"],
+    [data-testid="stSidebarCollapsedControl"] [data-testid="stIconMaterial"] {{
+        font-size: 0 !important;
+        line-height: 0 !important;
+        color: transparent !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 1.5rem !important;
+        height: 1.5rem !important;
+        position: relative !important;
+        user-select: none !important;
+    }}
+
+    [data-testid="stSidebarCollapseButton"] [data-testid="stIconMaterial"]::before {{
+        content: "\\f100" !important; /* nf-fa-angle_double_left */
+        font-family: 'JetBrainsMono Nerd Font', 'JetBrains Mono', monospace !important;
+        font-size: 1.15rem !important;
+        line-height: 1 !important;
+        color: var(--text-secondary) !important;
+        display: inline-block !important;
+        transition: color 0.15s ease-in-out, transform 0.15s ease-in-out !important;
+    }}
+
+    [data-testid="stSidebarCollapseButton"]:hover [data-testid="stIconMaterial"]::before,
+    button[data-testid="stBaseButton-headerNoPadding"]:hover [data-testid="stIconMaterial"]::before {{
+        color: var(--accent-blue) !important;
+        transform: scale(1.1) !important;
+    }}
+
+    [data-testid="stSidebarCollapsedControl"] [data-testid="stIconMaterial"]::before {{
+        content: "\\f101" !important; /* nf-fa-angle_double_right */
+        font-family: 'JetBrainsMono Nerd Font', 'JetBrains Mono', monospace !important;
+        font-size: 1.15rem !important;
+        line-height: 1 !important;
+        color: var(--text-secondary) !important;
+        display: inline-block !important;
+        transition: color 0.15s ease-in-out, transform 0.15s ease-in-out !important;
+    }}
+
+    [data-testid="stSidebarCollapsedControl"]:hover [data-testid="stIconMaterial"]::before {{
+        color: var(--accent-blue) !important;
+        transform: scale(1.1) !important;
+    }}
+
     section[data-testid="stSidebar"] h1,
     section[data-testid="stSidebar"] h2,
     section[data-testid="stSidebar"] h3,
@@ -274,8 +337,6 @@ def generate_theme_css(theme_key: str, fonts_css: str = "") -> str:
     }}
 
     /* Buttons & Download Buttons Typography and Styling */
-    button,
-    button *,
     div[data-testid="stButton"] button,
     div[data-testid="stButton"] button *,
     div[data-testid="stDownloadButton"] button,
