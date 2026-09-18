@@ -4,7 +4,7 @@ Main Streamlit Application Entrypoint.
 """
 
 import streamlit as st
-from config.config import APP_TITLE, DEFAULT_REFRESH_INTERVAL, load_settings
+from config.config import APP_TITLE, DEFAULT_REFRESH_INTERVAL, load_settings, ASSETS_DIR
 from database.database import db
 from services.monitoring_service import monitoring_service
 from ui.styles import get_theme_css
@@ -21,9 +21,10 @@ from ui.dashboard import (
 )
 
 # 1. Page Configuration
+icon_path = ASSETS_DIR / "icon.png"
 st.set_page_config(
     page_title=APP_TITLE,
-    page_icon="🛡️",
+    page_icon=str(icon_path) if icon_path.exists() else None,
     layout="wide",
     initial_sidebar_state="expanded",
 )
@@ -36,6 +37,11 @@ if "settings_loaded" not in st.session_state:
     st.session_state["setting_auto_refresh_enabled"] = saved_cfg.get("auto_refresh_enabled", True)
     st.session_state["settings_loaded"] = True
     monitoring_service.start()
+
+# Allow query params to dynamically set active theme
+if "theme" in st.query_params:
+    from ui.themes.manager import normalize_theme_key
+    st.session_state["theme"] = normalize_theme_key(st.query_params["theme"])
 
 active_theme = st.session_state.get("theme", "dark")
 st.markdown(get_theme_css(active_theme), unsafe_allow_html=True)

@@ -37,3 +37,7 @@ Thumbs.db
 .idea/
 *.swp
 .env
+
+# Visual QA temporary captures
+visual_qa/screenshots/
+visual_qa/comparisons/
