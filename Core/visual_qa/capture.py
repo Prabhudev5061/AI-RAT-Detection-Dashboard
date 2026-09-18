@@ -63,6 +63,15 @@ def capture_all_views(port: int, theme_list=None, pages_list=None):
         )
         page = context.new_page()
 
+        # Warmup visit to let Streamlit compile initial fragments and mount websocket
+        print(f"[Visual QA] Warming up Streamlit session on {app_url}...")
+        try:
+            page.goto(f"{app_url}/?theme=cyber_dark&page=dashboard", wait_until="networkidle", timeout=30000)
+            page.wait_for_selector('section[data-testid="stSidebar"]', timeout=15000)
+            time.sleep(2.0)
+        except Exception as e:
+            print(f"[Visual QA] Warmup notice: {e}")
+
         for theme_key, theme_name in target_themes:
             print(f"\n[Visual QA] Testing Theme: {theme_name} ({theme_key})...")
             clean_theme = theme_key.lower()

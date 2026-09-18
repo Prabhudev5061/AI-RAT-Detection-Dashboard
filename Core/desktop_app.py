@@ -31,6 +31,20 @@ import reportlab.lib.colors
 import reportlab.platypus
 import reportlab.pdfgen
 
+# Hide console immediately on Windows before importing heavy libraries
+def hide_console_window():
+    """Hides the console window on Windows to prevent terminal flicker during desktop launch."""
+    if sys.platform == "win32":
+        try:
+            import ctypes
+            hwnd = ctypes.windll.kernel32.GetConsoleWindow()
+            if hwnd:
+                ctypes.windll.user32.ShowWindow(hwnd, 0)
+        except Exception:
+            pass
+
+hide_console_window()
+
 # Guard against NoneType stdout/stderr in Windows GUI/noconsole mode
 if sys.stdout is None:
     sys.stdout = open(os.devnull, "w", encoding="utf-8")
@@ -129,17 +143,6 @@ def start_streamlit_server(port: int):
     logger.info(f"Starting Streamlit engine on 127.0.0.1:{port}...")
     bootstrap.run(APP_SCRIPT, is_hello=False, args=[f"--server.port={port}"], flag_options=flag_options)
 
-
-def hide_console_window():
-    """Hides the console window on Windows to prevent terminal flicker during desktop launch."""
-    if sys.platform == "win32":
-        try:
-            import ctypes
-            hwnd = ctypes.windll.kernel32.GetConsoleWindow()
-            if hwnd:
-                ctypes.windll.user32.ShowWindow(hwnd, 0)
-        except Exception:
-            pass
 
 
 def wait_for_server(port: int, timeout: float = 30.0) -> bool:
