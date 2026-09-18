@@ -1,9 +1,9 @@
-﻿# AI RAT Detection Dashboard
+# AI RAT Detection Dashboard
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Python: 3.10+](https://img.shields.io/badge/Python-3.10%2B-brightgreen.svg)](https://www.python.org/)
 [![Platform: Windows | Linux](https://img.shields.io/badge/Platform-Windows%20%7C%20Linux-blue.svg)](https://github.com/)
-[![CI: Passing](https://img.shields.io/badge/CI-Passing-success.svg)](.github/workflows/tests.yml)
+[![CI Test Suite](https://github.com/Prabhudev5061/AI-RAT-Detection-Dashboard/actions/workflows/tests.yml/badge.svg)](https://github.com/Prabhudev5061/AI-RAT-Detection-Dashboard/actions/workflows/tests.yml)
 [![Release: v1.0.0](https://img.shields.io/badge/Release-v1.0.0-emerald.svg)](Windows/Portable/)
 
 A production-ready, cross-platform host cybersecurity auditing suite and **Remote Access Trojan (RAT)** behavioral detection dashboard. Designed for security analysts, incident responders, and system administrators, the application delivers real-time hardware telemetry, process execution hierarchy audits, suspicious socket detection, defensive peripheral auditing, and automated forensic incident reporting.
@@ -53,10 +53,10 @@ The dashboard runs as a native standalone desktop application powered by `pywebv
 - **Executive PDF Generation**: Standalone, one-click PDF generation using `reportlab`, complete with high-severity alerts, process tables, network sockets, and remediation guidelines.
 - **Structured CSV Export**: Instant table exports for integration with external SIEM, ELK, or incident ticket workflows.
 
-### 6. Modern Desktop UI
-- **Native Window Experience**: Full native desktop window powered by `pywebview` (Windows WebView2 / Linux WebKit2GTK) without browser chrome or manual URL entry.
-- **Dynamic Theming**: Seamless switching between Obsidian Dark and Clean Light themes.
-- **Offline Typography**: Fully embedded JetBrains Mono fonts for complete offline air-gapped security environments.
+### 6. Modern Desktop UI & 8-Theme System
+- **Native Window Experience**: Full native desktop window powered by `pywebview` (Windows WebView2 / Linux WebKit2GTK) without browser chrome or manual URL entry, featuring instant startup and console suppression.
+- **8 Dynamic Visual Themes**: Seamless runtime switching between Obsidian Dark, Clean Light (high contrast), Cyberpunk Neon, Matrix Green, Nord Frost, Crimson Dark, White Slur (translucent glassmorphism), and Windows XP Classic.
+- **Offline Nerd Font Typography**: Bundled JetBrains Mono and JetBrains Mono Nerd Font typography with centralized icon mapping and zero raw emojis in the UI, fully operational in air-gapped forensic environments.
 
 ---
 
@@ -76,7 +76,7 @@ AI-RAT-Detection-Dashboard/
 │   ├── assets/                         # Application icons, logos, and bundled offline fonts
 │   │   ├── icon.ico                    # Windows icon
 │   │   ├── icon.png                    # Linux / Freedesktop icon
-│   │   └── fonts/                      # Offline JetBrains Mono font family (Regular & Bold)
+│   │   └── fonts/                      # Offline JetBrains Mono & JetBrains Mono Nerd Font (TTF)
 │   ├── platforms/                      # Hardware & OS abstraction layer
 │   │   ├── base.py                     # BasePlatformAdapter interface
 │   │   ├── windows.py                  # Windows Registry, UAC, GPU & sensor adapter
@@ -88,7 +88,7 @@ AI-RAT-Detection-Dashboard/
 │   ├── database/                       # Embedded SQLite storage with automatic pruning
 │   ├── config/                         # Configuration and persistent settings manager
 │   ├── utils/                          # Formatting, elevation, and helper utilities
-│   └── tests/                          # Automated pytest suite (33+ tests)
+│   └── tests/                          # Automated pytest suite (41 unit & integration tests)
 │
 ├── Windows/                            # WINDOWS PRODUCTION BUILDS ONLY
 │   ├── Portable/
@@ -158,13 +158,13 @@ Pre-compiled production binaries are provided directly in the repository:
 ## Quickstart (Run from Source)
 
 ### Prerequisites
-- **Python**: 3.10, 3.11, 3.12, 3.13, or 3.14
+- **Python**: 3.10, 3.11, 3.12, or 3.14 (fully verified across Ubuntu and Windows in CI)
 - **Operating System**: Windows 10/11 or modern Linux (Ubuntu 20.04+, Debian 11+, Fedora 36+)
 
 ### 1. Clone & Set Up Environment
 ```bash
-git clone https://github.com/<your-username>/ai-rat-detection-dashboard.git
-cd ai-rat-detection-dashboard/Core
+git clone https://github.com/Prabhudev5061/AI-RAT-Detection-Dashboard.git
+cd AI-RAT-Detection-Dashboard/Core
 
 # Create a virtual environment
 python -m venv .venv
@@ -260,21 +260,32 @@ Please be aware of the following technical limitations:
 
 ## Automated Verification
 
-The project includes an automated test suite covering all critical monitoring, detection, database, and reporting modules.
+The project includes an enterprise-grade automated test suite covering telemetry monitoring, behavioral threat heuristics, risk scoring, SQLite persistence, cross-platform adapters, worker lifecycles, CSS theme generation, and forensic PDF/CSV reporting.
+
+The test suite is verified via continuous integration across a 6-job matrix:
+- **Ubuntu Latest**: Python 3.10, Python 3.11, Python 3.12 (**All PASS**)
+- **Windows Latest**: Python 3.10, Python 3.11, Python 3.12 (**All PASS**)
 
 ```bash
+# Run all tests from the repository root:
+pytest Core/tests/ -v
+
+# Or run directly from the Core directory:
 cd Core
-pytest tests/ -v
+pytest tests/ -v --tb=short
+
+# Run with coverage report:
+pytest tests/ --cov=. --cov-report=term-missing
 ```
 
-### Verified Test Coverage (33/33 Tests Passing):
-- `tests/test_alert_service.py`: Alert creation, severity thresholding, and broadcast callbacks.
-- `tests/test_config.py`: Configuration persistence, default values, and environment overrides.
-- `tests/test_database.py`: SQLite schema initialization, alert retention, telemetry persistence, and automatic pruning.
-- `tests/test_detection.py`: Behavioral heuristics, process masquerading rules, and reverse shell detection.
-- `tests/test_monitoring.py`: Hardware metrics collection, tiered background caching, and socket enumeration.
-- `tests/test_platforms.py`: Windows and Linux platform abstraction interfaces and rootless fallback mechanisms.
-- `tests/test_report_service.py`: ReportLab PDF rendering, executive summaries, and CSV export validity.
+### Verified Test Suite (41/41 Tests Passing):
+- `tests/test_database.py` (5 tests): SQLite connection pooling, relational schema initialization, telemetry persistence, alerts storage, and auto-retention pruning.
+- `tests/test_detection.py` (6 tests): Process masquerading, suspicious directory execution, unauthorized parent-child spawns, suspicious network port analysis, composite risk engine scoring (0-100), and model-agnostic prediction interfaces.
+- `tests/test_lifecycle.py` (2 tests): Multi-threaded background telemetry worker lifecycle, daemon start/stop synchronization, and system monitor robustness.
+- `tests/test_monitoring.py` (7 tests): Hardware metric counters (CPU, RAM, Disk, Network), process hierarchy enumeration, top CPU consumers, startup persistence probes, socket states, and microsecond caching.
+- `tests/test_platforms.py` (7 tests): Cross-platform abstraction factory, user context retrieval, primary drive resolution, GPU metric schema, security sensors schema, autostart entries schema, and Linux adapter cross-platform safety.
+- `tests/test_reports.py` (2 tests): Structured forensic CSV exports and standalone ReportLab PDF incident reports.
+- `tests/test_theme_and_config.py` (12 tests): Embedded JetBrains Mono Nerd Font verification, CSS generation for all 8 visual themes, sidebar and widget overrides, Light theme text contrast, White Slur translucency, Windows XP styling, centralized icon mappings, icon HTML generator, theme normalization, Plotly theme configs, persistent settings serialization, and free port discovery.
 
 ---
 

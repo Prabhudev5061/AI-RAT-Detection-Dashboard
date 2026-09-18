@@ -12,7 +12,7 @@ The `Core/` directory is the **SINGLE MASTER SOURCE CODEBASE** for the AI RAT De
 |                             (desktop_app.py)                                |
 |   +---------------------------------------------------------------------+   |
 |   |                  pywebview Native Desktop Window                    |   |
-|   |       (Obsidian Dark / Clean Light UI via local Streamlit port)     |   |
+|   |            (8 Visual Themes via local Streamlit port)               |   |
 |   +---------------------------------------------------------------------+   |
 +--------------------------------------|--------------------------------------+
                                        | HTTP / WebSocket
@@ -75,7 +75,7 @@ Core/
 ├── assets/                         # Application branding and offline fonts
 │   ├── icon.ico                    # Windows icon (multi-resolution 16x16 to 256x256)
 │   ├── icon.png                    # Linux / Freedesktop icon
-│   └── fonts/                      # Offline JetBrains Mono (Regular, Bold TTF)
+│   └── fonts/                      # Offline JetBrains Mono & JetBrains Mono Nerd Font (TTF)
 │
 ├── config/                         # Configuration management
 │   ├── app_config.py               # Singleton configuration provider
@@ -116,21 +116,21 @@ Core/
 │   ├── charts.py                   # Plotly charts (time series, radar, gauge)
 │   ├── tables.py                   # Filterable data tables with action buttons
 │   ├── sidebar.py                  # Navigation sidebar and status indicators
-│   └── styles.py                   # Theme stylesheets (Obsidian Dark & Clean Light)
+│   └── styles.py                   # 8 Theme stylesheets (Obsidian, Light, Cyberpunk, Matrix, etc.)
 │
 ├── utils/                          # Cross-platform utility functions
 │   ├── formatting.py               # Human-readable byte, speed, and time formatters
 │   ├── helpers.py                  # Process name sanitizers and platform utilities
 │   └── permissions.py              # Privilege check and elevation helpers
 │
-└── tests/                          # Automated unit and integration test suite
-    ├── test_alert_service.py       # Alert emission, deduplication and severity tests
-    ├── test_config.py              # Config persistence and fallback tests
-    ├── test_database.py            # SQLite schema, transactions and pruning tests
-    ├── test_detection.py           # Threat heuristic and risk scoring tests
-    ├── test_monitoring.py          # Telemetry collection and caching tests
-    ├── test_platforms.py           # Platform adapter interface and method tests
-    └── test_report_service.py      # PDF generation and CSV export tests
+└── tests/                          # Automated unit and integration test suite (41 tests)
+    ├── test_database.py            # SQLite schema, transactions and pruning tests (5 tests)
+    ├── test_detection.py           # Threat heuristic and risk scoring tests (6 tests)
+    ├── test_lifecycle.py           # Telemetry service lifecycle and monitor tests (2 tests)
+    ├── test_monitoring.py          # Telemetry collection and caching tests (7 tests)
+    ├── test_platforms.py           # Platform adapter interface and method tests (7 tests)
+    ├── test_reports.py             # PDF generation and CSV export tests (2 tests)
+    └── test_theme_and_config.py    # Nerd font, 8 themes, contrast & settings tests (12 tests)
 ```
 
 ---
