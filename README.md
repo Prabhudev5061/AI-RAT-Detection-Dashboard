@@ -55,8 +55,20 @@ The dashboard runs as a native standalone desktop application powered by `pywebv
 
 ### 6. Modern Desktop UI & 8-Theme System
 - **Native Window Experience**: Full native desktop window powered by `pywebview` (Windows WebView2 / Linux WebKit2GTK) without browser chrome or manual URL entry, featuring instant startup and console suppression.
-- **8 Dynamic Visual Themes**: Seamless runtime switching between Obsidian Dark, Clean Light (high contrast), Cyberpunk Neon, Matrix Green, Nord Frost, Crimson Dark, White Slur (translucent glassmorphism), and Windows XP Classic.
+- **8 Dynamic Visual Themes**: Seamless runtime switching across 4 Dark themes (**Catppuccin Dark**, **Dracula Dark**, **Nord Dark**, **Cyber Dark**) and 4 Light themes (**White Slur** translucent glassmorphism, **Gruvbox Light**, **Windows XP Light**, and **Classic Light**).
 - **Offline Nerd Font Typography**: Bundled JetBrains Mono and JetBrains Mono Nerd Font typography with centralized icon mapping and zero raw emojis in the UI, fully operational in air-gapped forensic environments.
+- **Autonomous Visual QA**: Verified across all 64 page/theme permutations (8 views &times; 8 themes) with Playwright headless capture.
+
+### 7. Integrated Forensic & Monitoring Views
+The application organizes host monitoring, threat detection, and defensive auditing into 8 dedicated views:
+- **Dashboard**: System overview, composite risk score (0–100 scale), key hardware telemetry cards, top processes by CPU/memory, and active threat alert banners.
+- **Live Monitor**: High-frequency telemetry streaming (CPU cores, RAM usage, physical disk throughput, network adapter bandwidth), GPU metrics, and historical sparklines.
+- **Process Analysis**: Deep process execution hierarchy inspection, parent-child process tree mapping, command-line arguments, hashes, suspicious execution path detection, and process termination controls.
+- **Network Monitor**: Real-time socket enumeration (`ESTABLISHED`, `LISTEN`, `SYN_SENT`), C2 reverse shell detection, suspicious port binding alerts, and socket inspection.
+- **Security Tools**: Defensive peripheral audits (camera, microphone, screen recording, remote desktop/access software), autostart registry Run keys & XDG persistence inspection, and privilege elevation status.
+- **Event Logs**: Structured SQLite-backed security event log with severity filtering (INFO, WARNING, HIGH, CRITICAL) and instant search.
+- **Reports**: Automated forensic incident reporting with one-click executive PDF generation (via `reportlab`) and structured CSV table exports.
+- **Settings**: Dynamic theme selector (8 themes), configurable background refresh intervals (3s, 5s, 10s, 15s, 30s), network socket correlator toggle, and telemetry retention management.
 
 ---
 

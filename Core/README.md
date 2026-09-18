@@ -116,7 +116,7 @@ Core/
 │   ├── charts.py                   # Plotly charts (time series, radar, gauge)
 │   ├── tables.py                   # Filterable data tables with action buttons
 │   ├── sidebar.py                  # Navigation sidebar and status indicators
-│   └── styles.py                   # 8 Theme stylesheets (Obsidian, Light, Cyberpunk, Matrix, etc.)
+│   └── styles.py                   # 8 Theme stylesheets (Catppuccin, Dracula, Nord, Cyber, White Slur, etc.)
 │
 ├── utils/                          # Cross-platform utility functions
 │   ├── formatting.py               # Human-readable byte, speed, and time formatters
@@ -178,7 +178,34 @@ To guarantee clean separation between operating systems:
 
 ---
 
-## 5. Developer Rules & Best Practices
+## 5. UI Theme System & Dashboard Views
+
+### Available Themes
+The application provides 8 themes with WCAG-compliant text contrast and embedded JetBrains Mono Nerd Font typography:
+- **Dark Group**:
+  - `Catppuccin Dark` (`catppuccin_dark`): Mocha palette (`#1e1e2e`) with pastel lavender accents.
+  - `Dracula Dark` (`dracula_dark`): High-contrast palette (`#282a36`) with cyan/purple highlights.
+  - `Nord Dark` (`nord_dark`): Arctic slate (`#2e3440`) with frost blue and snow white typography.
+  - `Cyber Dark` (`cyber_dark`): Deep midnight navy (`#0b0f19`) SOC dashboard with cyan/blue accents (Default).
+- **Light Group**:
+  - `White Slur` (`white_slur`): Translucent glassmorphism with `#f8fafc` background and dark slate `#0f172a` text.
+  - `Gruvbox Light` (`gruvbox_light`): Warm retro day palette (`#fbf1c7`) with deep brown `#282828` typography.
+  - `Windows XP Light` (`windows_xp`): Classic Luna desktop palette (`#eef3fa` / `#ece9d8`) with Luna blue accents.
+  - `Classic Light` (`classic_light`): High-contrast daylight palette (`#f8fafc`) with slate card containers.
+
+### Integrated Dashboard Views
+- `Dashboard`: System overview, composite risk score (0–100 scale), key telemetry cards, top processes, and active threat alert banners.
+- `Live Monitor`: High-frequency hardware telemetry streaming (CPU, RAM, disk, network), GPU metrics, and historical sparklines.
+- `Process Analysis`: Process execution hierarchy, parent-child tree mapping, and termination controls.
+- `Network Monitor`: Real-time socket enumeration (`ESTABLISHED`, `LISTEN`, etc.) and reverse shell detection.
+- `Security Tools`: Peripheral audits (camera, microphone, screen recording, remote access) and persistence inspection.
+- `Event Logs`: Structured SQLite security event log with severity filtering (INFO, WARNING, HIGH, CRITICAL).
+- `Reports`: Incident reporting with one-click executive PDF generation and CSV exports.
+- `Settings`: Dynamic theme switcher, refresh interval configuration, and network correlator toggles.
+
+---
+
+## 6. Developer Rules & Best Practices
 
 1. **No External AI Runtime Dependencies**:
    - The application must remain fully functional offline. Do not add runtime calls to LLM APIs, cloud models, or local inference servers.
@@ -191,7 +218,7 @@ To guarantee clean separation between operating systems:
 
 ---
 
-## 6. How to Run Tests
+## 7. How to Run Tests
 
 The test suite requires no external hardware or elevated privileges:
 
@@ -205,7 +232,7 @@ pytest tests/ --cov=. --cov-report=term-missing
 
 ---
 
-## 7. How to Build Distributions
+## 8. How to Build Distributions
 
 ### Building for Windows:
 ```bash
