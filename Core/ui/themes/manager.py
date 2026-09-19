@@ -196,16 +196,79 @@ def generate_theme_css(theme_key: str, fonts_css: str = "") -> str:
 
     /* Sidebar Collapse & Expand Controls: Replace Material ligature text with embedded Nerd Font icon glyphs */
     [data-testid="stSidebarCollapseButton"] button,
-    [data-testid="stSidebarCollapsedControl"] button {{
+    [data-testid="stSidebarCollapsedControl"] button,
+    [data-testid="stExpandSidebarButton"] {{
         background-color: transparent !important;
-        border: none !important;
+        border: 1px solid transparent !important;
+        border-radius: 6px !important;
         box-shadow: none !important;
         cursor: pointer !important;
         color: var(--text-secondary) !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 2rem !important;
+        height: 2rem !important;
+        min-width: 32px !important;
+        min-height: 32px !important;
+        pointer-events: auto !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, color 0.15s ease-in-out, transform 0.15s ease-in-out, box-shadow 0.15s ease-in-out !important;
+        outline: none !important;
+        position: relative !important;
     }}
 
+    /* Collapsed state expand button: styled badge inheriting active theme */
+    [data-testid="stExpandSidebarButton"],
+    [data-testid="stSidebarCollapsedControl"] button {{
+        background-color: var(--surface) !important;
+        border: 1px solid var(--sidebar-border) !important;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
+        margin-top: 6px !important;
+        margin-left: 6px !important;
+    }}
+
+    [data-testid="stSidebarCollapseButton"] button:hover,
+    button[data-testid="stBaseButton-headerNoPadding"]:hover {{
+        background-color: var(--surface-alt) !important;
+        border-color: var(--card-border) !important;
+        color: var(--accent-blue) !important;
+        transform: scale(1.05) !important;
+    }}
+
+    [data-testid="stExpandSidebarButton"]:hover,
+    [data-testid="stSidebarCollapsedControl"] button:hover {{
+        background-color: var(--surface-alt) !important;
+        border-color: var(--accent-blue) !important;
+        color: var(--accent-blue) !important;
+        transform: scale(1.05) !important;
+    }}
+
+    [data-testid="stSidebarCollapseButton"] button:active,
+    [data-testid="stExpandSidebarButton"]:active,
+    [data-testid="stSidebarCollapsedControl"] button:active {{
+        transform: scale(0.95) !important;
+    }}
+
+    [data-testid="stSidebarCollapseButton"] button:focus-visible,
+    [data-testid="stExpandSidebarButton"]:focus-visible,
+    [data-testid="stSidebarCollapsedControl"] button:focus-visible {{
+        outline: 2px solid var(--accent-blue) !important;
+        outline-offset: 2px !important;
+    }}
+
+    /* Keep collapse container visible in sidebar header */
+    [data-testid="stSidebarCollapseButton"] {{
+        visibility: visible !important;
+        opacity: 1 !important;
+        display: block !important;
+    }}
+
+    /* Icon containers inside buttons */
     [data-testid="stSidebarCollapseButton"] [data-testid="stIconMaterial"],
-    [data-testid="stSidebarCollapsedControl"] [data-testid="stIconMaterial"] {{
+    [data-testid="stSidebarCollapsedControl"] [data-testid="stIconMaterial"],
+    [data-testid="stExpandSidebarButton"] [data-testid="stIconMaterial"] {{
         font-size: 0 !important;
         line-height: 0 !important;
         color: transparent !important;
@@ -218,6 +281,7 @@ def generate_theme_css(theme_key: str, fonts_css: str = "") -> str:
         user-select: none !important;
     }}
 
+    /* Collapse icon glyph: \f100 (double angle left <<) */
     [data-testid="stSidebarCollapseButton"] [data-testid="stIconMaterial"]::before {{
         content: "\\f100" !important; /* nf-fa-angle_double_left */
         font-family: 'JetBrainsMono Nerd Font', 'JetBrains Mono', monospace !important;
@@ -234,7 +298,9 @@ def generate_theme_css(theme_key: str, fonts_css: str = "") -> str:
         transform: scale(1.1) !important;
     }}
 
-    [data-testid="stSidebarCollapsedControl"] [data-testid="stIconMaterial"]::before {{
+    /* Expand icon glyph: \f101 (double angle right >>) */
+    [data-testid="stSidebarCollapsedControl"] [data-testid="stIconMaterial"]::before,
+    [data-testid="stExpandSidebarButton"] [data-testid="stIconMaterial"]::before {{
         content: "\\f101" !important; /* nf-fa-angle_double_right */
         font-family: 'JetBrainsMono Nerd Font', 'JetBrains Mono', monospace !important;
         font-size: 1.15rem !important;
@@ -244,9 +310,65 @@ def generate_theme_css(theme_key: str, fonts_css: str = "") -> str:
         transition: color 0.15s ease-in-out, transform 0.15s ease-in-out !important;
     }}
 
-    [data-testid="stSidebarCollapsedControl"]:hover [data-testid="stIconMaterial"]::before {{
+    [data-testid="stSidebarCollapsedControl"]:hover [data-testid="stIconMaterial"]::before,
+    [data-testid="stExpandSidebarButton"]:hover [data-testid="stIconMaterial"]::before {{
         color: var(--accent-blue) !important;
         transform: scale(1.1) !important;
+    }}
+
+    /* Clean CSS tooltips on hover */
+    [data-testid="stSidebarCollapseButton"] button::after {{
+        content: "Collapse sidebar";
+        position: absolute;
+        top: 115%;
+        right: 0;
+        background-color: var(--card-bg);
+        color: var(--text-primary);
+        border: 1px solid var(--card-border);
+        padding: 3px 8px;
+        font-size: 0.72rem;
+        font-family: 'JetBrainsMono Nerd Font', 'JetBrains Mono', monospace;
+        border-radius: 4px;
+        white-space: nowrap;
+        z-index: 999999;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+        pointer-events: none;
+        opacity: 0;
+        transform: translateY(-4px);
+        transition: opacity 0.15s ease, transform 0.15s ease;
+    }}
+
+    [data-testid="stSidebarCollapseButton"] button:hover::after {{
+        opacity: 1;
+        transform: translateY(0);
+    }}
+
+    [data-testid="stExpandSidebarButton"]::after,
+    [data-testid="stSidebarCollapsedControl"] button::after {{
+        content: "Expand sidebar";
+        position: absolute;
+        top: 50%;
+        left: calc(100% + 8px);
+        transform: translateY(-50%) translateX(-4px);
+        background-color: var(--card-bg);
+        color: var(--text-primary);
+        border: 1px solid var(--card-border);
+        padding: 3px 8px;
+        font-size: 0.72rem;
+        font-family: 'JetBrainsMono Nerd Font', 'JetBrains Mono', monospace;
+        border-radius: 4px;
+        white-space: nowrap;
+        z-index: 999999;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.15s ease, transform 0.15s ease;
+    }}
+
+    [data-testid="stExpandSidebarButton"]:hover::after,
+    [data-testid="stSidebarCollapsedControl"] button:hover::after {{
+        opacity: 1;
+        transform: translateY(-50%) translateX(0);
     }}
 
     section[data-testid="stSidebar"] h1,
@@ -715,17 +837,32 @@ def generate_theme_css(theme_key: str, fonts_css: str = "") -> str:
         border-radius: 8px;
     }}
 
-    /* Chrome cleanup */
-    #MainMenu {{visibility: hidden;}}
-    footer {{visibility: hidden;}}
+    /* Chrome cleanup: Keep header functional for expand controls while suppressing default chrome */
+    #MainMenu {{visibility: hidden; display: none !important;}}
+    footer {{visibility: hidden; display: none !important;}}
+    [data-testid="stMainMenu"] {{display: none !important; visibility: hidden !important;}}
+    [data-testid="stAppDeployButton"] {{display: none !important; visibility: hidden !important;}}
+    [data-testid="stDecoration"] {{display: none !important; height: 0px !important;}}
+    [data-testid="stStatusWidget"] {{display: none !important; visibility: hidden !important;}}
+
     header[data-testid="stHeader"] {{
-        display: none !important;
-        height: 0px !important;
+        display: flex !important;
         background: transparent !important;
+        color: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+        height: 3.2rem !important;
+        pointer-events: none !important;
+        z-index: 999990 !important;
     }}
-    [data-testid="stDecoration"] {{
+
+    /* Suppress 0-height iframes completely so they take zero layout space */
+    iframe[height="0"],
+    div:has(> iframe[height="0"]) {{
         display: none !important;
         height: 0px !important;
+        margin: 0 !important;
+        padding: 0 !important;
     }}
 
     {custom_overrides}

@@ -95,7 +95,7 @@ class MonitoringService:
         startup_items = startup_monitor.get_startup_programs()
         connections = network_monitor.get_active_connections(limit=50)
         suspicious_ports = network_monitor.get_suspicious_port_connections()
-        security_status = behavior_monitor.get_security_status()
+        security_status = behavior_monitor.get_security_status(processes=processes)
 
         parent_map = {p["pid"]: p["name"] for p in processes}
         evaluation = risk_engine.evaluate_system(
@@ -179,7 +179,7 @@ class MonitoringService:
                 # Tier 2: Low-frequency deep scan (Startup items & Security status)
                 if now - last_deep_time >= self.deep_scan_interval:
                     items = startup_monitor.get_startup_programs()
-                    sec = behavior_monitor.get_security_status()
+                    sec = behavior_monitor.get_security_status(processes=self._cached_processes)
                     with self._lock:
                         self._cached_startup_items = items
                         self._cached_security_status = sec

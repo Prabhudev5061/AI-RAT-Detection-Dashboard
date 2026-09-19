@@ -75,6 +75,8 @@ def test_sidebar_collapse_button_nerd_font_replacement():
     """
     Verifies that Streamlit Material Symbols ligature strings (e.g. keyboard_double_arrow_left)
     are suppressed with font-size: 0 and color: transparent, and replaced with clean embedded Nerd Font icons.
+    Verifies modern stExpandSidebarButton and legacy stSidebarCollapsedControl selectors.
+    Verifies that header[data-testid="stHeader"] is NOT display: none so the expand button remains accessible.
     Also verifies broad 'button, button *' override is eliminated.
     """
     css = get_theme_css("dracula_dark")
@@ -83,10 +85,51 @@ def test_sidebar_collapse_button_nerd_font_replacement():
     assert 'color: transparent !important;' in css
     assert '[data-testid="stSidebarCollapseButton"]' in css
     assert '[data-testid="stSidebarCollapsedControl"]' in css
+    assert '[data-testid="stExpandSidebarButton"]' in css
     assert '\\f100' in css
     assert '\\f101' in css
+
+    # Header must be functional (not hidden with display: none)
+    assert 'header[data-testid="stHeader"]' in css
+    assert 'header[data-testid="stHeader"] {\n        display: none !important;' not in css
+    assert 'pointer-events: none !important;' in css
+    assert 'pointer-events: auto !important;' in css
+
     # Ensure overbroad 'button,\n    button *' is not present
     assert 'button,\n    button *,' not in css
+
+
+def test_sidebar_collapse_and_expand_theme_inheritance():
+    """Verifies that sidebar collapse and expand controls properly inherit theme tokens across all themes."""
+    for theme_key in THEMES:
+        css = get_theme_css(theme_key)
+        assert '[data-testid="stExpandSidebarButton"]' in css
+        assert '[data-testid="stSidebarCollapseButton"]' in css
+        assert 'var(--surface)' in css
+        assert 'var(--sidebar-border)' in css
+        assert 'var(--accent-blue)' in css
+
+
+def test_windows_xp_sidebar_controls():
+    """Verifies Windows XP Light theme tokens for sidebar expand/collapse controls."""
+    xp = get_theme("windows_xp")
+    assert xp.name == "Windows XP Light"
+    assert xp.surface == "#ece9d8"
+    assert xp.sec_border == "#7f9db9"
+    assert xp.accent_blue == "#0055ea"
+
+    css = get_theme_css("windows_xp")
+    assert "--surface: #ece9d8" in css
+    assert "--sidebar-border: #7f9db9" in css
+    assert "--accent-blue: #0055ea" in css
+    assert '[data-testid="stExpandSidebarButton"]' in css
+
+
+def test_sidebar_accessibility_tooltips():
+    """Verifies that hover tooltips for Collapse sidebar and Expand sidebar are defined."""
+    css = get_theme_css("cyber_dark")
+    assert 'content: "Collapse sidebar";' in css
+    assert 'content: "Expand sidebar";' in css
 
 
 def test_light_theme_text_contrast():

@@ -3,19 +3,28 @@ AI-RAT-Detection-Dashboard - Process Monitor
 Collects running processes, parent-child hierarchies, and resource allocations.
 """
 
+import time
 import psutil
 import datetime
 from typing import List, Dict, Any, Optional
 
 
 class ProcessMonitor:
-    """Monitors running processes and inspects execution hierarchies."""
+    """Monitors running processes and inspects execution hierarchies with caching."""
 
-    def get_all_processes(self) -> List[Dict[str, Any]]:
+    def __init__(self):
+        self._cached_procs: List[Dict[str, Any]] = []
+        self._last_proc_time: float = 0.0
+
+    def get_all_processes(self, max_age: float = 2.5) -> List[Dict[str, Any]]:
         """
         Enumerate all active processes defensively.
-        Handles AccessDenied, NoSuchProcess, ZombieProcess gracefully.
+        Returns cached list if called within max_age seconds to eliminate duplicate sweeps.
         """
+        now = time.time()
+        if self._cached_procs and (now - self._last_proc_time < max_age):
+            return list(self._cached_procs)
+
         processes = []
         for proc in psutil.process_iter(
             ["pid", "name", "cpu_percent", "memory_percent", "exe", "ppid", "create_time", "status"]
@@ -50,6 +59,8 @@ class ProcessMonitor:
             except Exception:
                 continue
 
+        self._cached_procs = processes
+        self._last_proc_time = now
         return processes
 
     def get_top_cpu_processes(

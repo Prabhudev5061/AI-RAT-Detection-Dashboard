@@ -1,6 +1,7 @@
-﻿"""
+"""
 AI-RAT-Detection-Dashboard - Dashboard & Subpage Views
-Implements each navigation page with rich, interactive, real-time cyber security components.
+Implements each navigation page with rich, interactive, real-time cyber security components
+utilizing centralized Nerd Font icons and modular themes.
 """
 
 import streamlit as st
@@ -9,6 +10,13 @@ from typing import Dict, Any, List
 
 from config.config import APP_TITLE, APP_SUBTITLE, APP_VERSION, load_settings, save_settings
 from database.database import db
+from ui.icons import get_icon, icon_html
+from ui.themes.manager import (
+    get_theme,
+    get_theme_names_list,
+    get_key_from_display_name,
+    normalize_theme_key,
+)
 from ui.cards import render_metric_cards
 from ui.charts import render_history_charts
 from ui.tables import (
@@ -33,10 +41,10 @@ def render_dashboard_header(last_updated: str, refresh_interval: int):
         st.markdown(
             f"""
             <div style="margin-bottom: 1.2rem;">
-                <h2 style="margin:0; font-size:1.65rem; font-weight:800; color:#f8fafc; letter-spacing:-0.5px;">
+                <h2 style="margin:0; font-size:1.65rem; font-weight:800; color:var(--text-primary); letter-spacing:-0.5px;">
                     {APP_TITLE}
                 </h2>
-                <div style="font-size:0.82rem; color:#94a3b8; margin-top:2px;">
+                <div style="font-size:0.82rem; color:var(--text-muted); margin-top:2px;">
                     {APP_SUBTITLE}
                 </div>
             </div>
@@ -44,20 +52,23 @@ def render_dashboard_header(last_updated: str, refresh_interval: int):
             unsafe_allow_html=True,
         )
     with col_status:
+        clock_glyph = icon_html("clock", extra_classes="accent-blue", extra_styles="font-size:0.85rem;")
+        dot_glyph = icon_html("dot", extra_styles="color:var(--badge-safe-text); font-size:0.65rem;")
         st.markdown(
             f"""
             <div style="display:flex; justify-content:flex-end; align-items:center; gap:12px; margin-top:6px;">
                 <div style="
-                    background:#111827; border:1px solid #1f293d; border-radius:8px;
-                    padding:6px 12px; font-size:0.75rem; color:#94a3b8; font-family:'JetBrains Mono', monospace;
+                    background:var(--card-bg); border:1px solid var(--card-border); border-radius:8px;
+                    padding:6px 12px; font-size:0.75rem; color:var(--text-secondary); font-family:'JetBrainsMono Nerd Font', 'JetBrains Mono', monospace;
                 ">
-                    ðŸ•’ Last Updated: <b style="color:#cbd5e1;">{last_updated}</b>
+                    {clock_glyph} Last Updated: <b style="color:var(--text-primary);">{last_updated}</b>
                 </div>
                 <div style="
-                    background:rgba(52, 211, 153, 0.12); border:1px solid rgba(52, 211, 153, 0.3);
-                    border-radius:8px; padding:6px 12px; font-size:0.75rem; color:#34d399; font-weight:600;
+                    background:var(--badge-safe-bg); border:1px solid var(--badge-safe-border);
+                    border-radius:8px; padding:6px 12px; font-size:0.75rem; color:var(--badge-safe-text); font-weight:600;
+                    display:flex; align-items:center; gap:6px;
                 ">
-                    ðŸŸ¢ AI Engine Active | {refresh_interval}s
+                    {dot_glyph} AI Engine Active | {refresh_interval}s
                 </div>
             </div>
             """,
@@ -113,7 +124,8 @@ def render_dashboard_view(data: Dict[str, Any], recent_metrics: List[Dict[str, A
 
 def render_live_monitor_view(data: Dict[str, Any], recent_metrics: List[Dict[str, Any]]):
     """Detailed high-frequency hardware and system live monitoring view."""
-    st.markdown("### âš¡ Live System & Resource Telemetry")
+    bolt_glyph = get_icon("bolt")
+    st.markdown(f"### {bolt_glyph} Live System & Resource Telemetry")
     st.markdown("Real-time streaming telemetry with bandwidth throughput and resource allocation.")
 
     metrics = data.get("metrics", {})
@@ -130,14 +142,14 @@ def render_live_monitor_view(data: Dict[str, Any], recent_metrics: List[Dict[str
     st.markdown("#### Hardware Resource Breakdown")
     col1, col2, col3 = st.columns(3)
     gpu = metrics.get("gpu", {})
-    drive_label = metrics.get("drive_label", "System Drive")
 
     with col1:
+        ram_icon = icon_html("memory", extra_classes="accent-purple")
         st.markdown(
             f"""
             <div class="cyber-card">
-                <div class="card-title">ðŸ’¾ RAM Memory Allocation</div>
-                <div style="margin-top:10px; font-family:'JetBrains Mono', monospace; font-size:0.85rem;">
+                <div class="card-title">{ram_icon} RAM Memory Allocation</div>
+                <div style="margin-top:10px; font-family:'JetBrainsMono Nerd Font', 'JetBrains Mono', monospace; font-size:0.85rem;">
                     <div>Used: <b>{metrics.get('memory_used', 0) / (1024**3):.2f} GB</b></div>
                     <div>Total: <b>{metrics.get('memory_total', 0) / (1024**3):.2f} GB</b></div>
                     <div>Percentage: <b>{metrics.get('memory_percent', 0)}%</b></div>
@@ -147,11 +159,12 @@ def render_live_monitor_view(data: Dict[str, Any], recent_metrics: List[Dict[str
             unsafe_allow_html=True,
         )
     with col2:
+        disk_icon = icon_html("disk", extra_classes="accent-yellow")
         st.markdown(
             f"""
             <div class="cyber-card">
-                <div class="card-title">ðŸ—„ï¸ Primary Storage Allocation</div>
-                <div style="margin-top:10px; font-family:'JetBrains Mono', monospace; font-size:0.85rem;">
+                <div class="card-title">{disk_icon} Primary Storage Allocation</div>
+                <div style="margin-top:10px; font-family:'JetBrainsMono Nerd Font', 'JetBrains Mono', monospace; font-size:0.85rem;">
                     <div>Used: <b>{metrics.get('disk_used', 0) / (1024**3):.2f} GB</b></div>
                     <div>Total: <b>{metrics.get('disk_total', 0) / (1024**3):.2f} GB</b></div>
                     <div>Percentage: <b>{metrics.get('disk_percent', 0)}%</b></div>
@@ -176,11 +189,12 @@ def render_live_monitor_view(data: Dict[str, Any], recent_metrics: List[Dict[str
             if gpu_avail
             else f"<div>Model: <b>{gpu_name}</b></div><div>Status: <b>Standard / Integrated Graphics</b></div><div>Driver: <b>System Default</b></div>"
         )
+        gpu_icon = icon_html("gpu", extra_classes="accent-blue")
         st.markdown(
             f"""
             <div class="cyber-card">
-                <div class="card-title">ðŸŽ® GPU Graphics Telemetry</div>
-                <div style="margin-top:10px; font-family:'JetBrains Mono', monospace; font-size:0.85rem;">
+                <div class="card-title">{gpu_icon} GPU Graphics Telemetry</div>
+                <div style="margin-top:10px; font-family:'JetBrainsMono Nerd Font', 'JetBrains Mono', monospace; font-size:0.85rem;">
                     {gpu_status_html}
                 </div>
             </div>
@@ -191,14 +205,16 @@ def render_live_monitor_view(data: Dict[str, Any], recent_metrics: List[Dict[str
 
 def render_process_analysis_view(data: Dict[str, Any]):
     """Detailed process inventory and forensic analysis view."""
-    st.markdown("### ðŸ” Process Behavioral Analysis")
+    search_glyph = get_icon("search")
+    st.markdown(f"### {search_glyph} Process Behavioral Analysis")
     st.markdown("Audits running executables, identifies anomalous execution paths, and evaluates risk.")
 
     processes = data.get("processes", [])
     flagged = data.get("evaluation", {}).get("flagged_processes", [])
 
     if flagged:
-        st.warning(f"âš ï¸ {len(flagged)} process(es) flagged with elevated risk indicators.")
+        warn_glyph = get_icon("warning")
+        st.warning(f"{warn_glyph} {len(flagged)} process(es) flagged with elevated risk indicators.")
         flagged_df = pd.DataFrame(flagged)[["pid", "name", "risk_score", "risk_level", "reasons"]]
         st.dataframe(flagged_df, use_container_width=True)
 
@@ -223,14 +239,16 @@ def render_process_analysis_view(data: Dict[str, Any]):
 
 def render_network_monitor_view(data: Dict[str, Any]):
     """Deep network socket auditing view."""
-    st.markdown("### ðŸŒ Network Socket & Connection Auditing")
+    net_glyph = get_icon("network")
+    st.markdown(f"### {net_glyph} Network Socket & Connection Auditing")
     st.markdown("Surfaces all active TCP and UDP sockets with correlated process identifiers.")
 
     conns = data.get("connections", [])
     suspicious = data.get("suspicious_ports", [])
 
     if suspicious:
-        st.error(f"ðŸš¨ {len(suspicious)} connection(s) associated with known suspicious/RAT ports!")
+        alert_glyph = get_icon("warning")
+        st.error(f"{alert_glyph} {len(suspicious)} connection(s) associated with known suspicious/RAT ports!")
         st.dataframe(pd.DataFrame(suspicious), use_container_width=True)
 
     st.markdown("#### Active Sockets Table")
@@ -251,7 +269,8 @@ def render_network_monitor_view(data: Dict[str, Any]):
 
 def render_security_tools_view(data: Dict[str, Any]):
     """Defensive security tools and diagnostic audits."""
-    st.markdown("### ðŸ› ï¸ Defensive Security Tools & Diagnostic Audit")
+    shield_glyph = get_icon("shield")
+    st.markdown(f"### {shield_glyph} Defensive Security Tools & Diagnostic Audit")
     st.markdown("Specialized inspection tools for host hardening, registry startup, and privilege validation.")
 
     t1, t2, t3 = st.tabs(["Startup Programs Audit", "Sensor Privacy Telemetry", "Host Diagnostics"])
@@ -284,7 +303,8 @@ def render_security_tools_view(data: Dict[str, Any]):
 
 def render_event_logs_view(data: Dict[str, Any]):
     """Historical security events and audit log view."""
-    st.markdown("### ðŸ“œ Security Audit & Event Logs")
+    history_glyph = get_icon("history")
+    st.markdown(f"### {history_glyph} Security Audit & Event Logs")
     st.markdown("Chronological forensic event log stored in local SQLite database.")
 
     col1, col2 = st.columns([2, 1])
@@ -305,21 +325,24 @@ def render_event_logs_view(data: Dict[str, Any]):
 
 def render_reports_view(data: Dict[str, Any]):
     """Export and reporting center for CSV and PDF reports."""
-    st.markdown("### ðŸ“Š Forensic Reports & Data Exports")
+    report_glyph = get_icon("report")
+    st.markdown(f"### {report_glyph} Forensic Reports & Data Exports")
     st.markdown("Export comprehensive telemetry dumps and formatted executive PDF reports.")
 
     col1, col2 = st.columns(2)
 
     with col1:
+        pdf_icon = icon_html("file", extra_classes="accent-blue")
         st.markdown(
-            """
+            f"""
             <div class="cyber-card">
-                <div class="card-title">ðŸ“„ Executive PDF Security Report</div>
+                <div class="card-title">{pdf_icon} Executive PDF Security Report</div>
                 <div class="card-subtitle">Formatted PDF report with threat scoring, process lists, and audit findings.</div>
             """,
             unsafe_allow_html=True,
         )
-        if st.button("Generate Executive PDF Report", key="btn_gen_pdf"):
+        dl_glyph = get_icon("download")
+        if st.button(f"{get_icon('file')} Generate Executive PDF Report", key="btn_gen_pdf"):
             with st.spinner("Compiling PDF report..."):
                 pdf_path = report_service.generate_pdf_report(data)
                 with open(pdf_path, "rb") as f:
@@ -328,11 +351,11 @@ def render_reports_view(data: Dict[str, Any]):
                     "name": pdf_path.name,
                     "bytes": pdf_bytes,
                 }
-                st.success(f"Report compiled successfully: {pdf_path.name}")
+                st.success(f"{get_icon('success')} Report compiled successfully: {pdf_path.name}")
 
         if "last_generated_pdf" in st.session_state:
             st.download_button(
-                label=f"â¬‡ï¸ Download {st.session_state['last_generated_pdf']['name']}",
+                label=f"{dl_glyph} Download {st.session_state['last_generated_pdf']['name']}",
                 data=st.session_state["last_generated_pdf"]["bytes"],
                 file_name=st.session_state["last_generated_pdf"]["name"],
                 mime="application/pdf",
@@ -341,17 +364,18 @@ def render_reports_view(data: Dict[str, Any]):
         st.markdown("</div>", unsafe_allow_html=True)
 
     with col2:
+        folder_icon = icon_html("folder", extra_classes="accent-purple")
         st.markdown(
-            """
+            f"""
             <div class="cyber-card">
-                <div class="card-title">ðŸ“ Raw Data CSV Exports</div>
+                <div class="card-title">{folder_icon} Raw Data CSV Exports</div>
                 <div class="card-subtitle">Export telemetry and event log tables in standard CSV format.</div>
             """,
             unsafe_allow_html=True,
         )
         csv_metrics = report_service.generate_csv_metrics()
         st.download_button(
-            label="â¬‡ï¸ Export Metrics History (CSV)",
+            label=f"{dl_glyph} Export Metrics History (CSV)",
             data=csv_metrics,
             file_name="system_metrics_export.csv",
             mime="text/csv",
@@ -360,7 +384,7 @@ def render_reports_view(data: Dict[str, Any]):
 
         csv_events = report_service.generate_csv_events()
         st.download_button(
-            label="â¬‡ï¸ Export Event Logs (CSV)",
+            label=f"{dl_glyph} Export Event Logs (CSV)",
             data=csv_events,
             file_name="security_events_export.csv",
             mime="text/csv",
@@ -371,33 +395,37 @@ def render_reports_view(data: Dict[str, Any]):
 
 def render_settings_view():
     """Application configuration and maintenance settings."""
-    st.markdown("### âš™ï¸ Application Settings & Configuration")
+    settings_glyph = get_icon("settings")
+    st.markdown(f"### {settings_glyph} Application Settings & Configuration")
     st.markdown("Tune refresh parameters, visual themes, detection thresholds, and database maintenance.")
 
     current_cfg = load_settings()
     col1, col2 = st.columns(2)
 
     with col1:
+        palette_icon = icon_html("palette", extra_classes="accent-blue")
         st.markdown(
-            """
+            f"""
             <div class="cyber-card">
-                <div class="card-title">ðŸŽ¨ Appearance & Interface</div>
+                <div class="card-title">{palette_icon} Appearance & Interface</div>
             """,
             unsafe_allow_html=True,
         )
-        theme_options = ["Dark", "Light", "System"]
-        current_theme = st.session_state.get("theme", current_cfg.get("theme", "dark")).capitalize()
-        theme_idx = theme_options.index(current_theme) if current_theme in theme_options else 0
+        theme_names = get_theme_names_list()
+        current_theme_key = normalize_theme_key(st.session_state.get("theme", current_cfg.get("theme", "cyber_dark")))
+        current_display = get_theme(current_theme_key).name
+        theme_idx = theme_names.index(current_display) if current_display in theme_names else 0
 
-        selected_theme = st.selectbox(
+        selected_display_theme = st.selectbox(
             "Display Theme Mode",
-            options=theme_options,
+            options=theme_names,
             index=theme_idx,
             key="settings_theme_select",
-            help="Choose between Dark Cybersecurity SOC, Light Professional, or System default",
+            help="Choose between Dark themes (Catppuccin, Dracula, Nord, Cyber) and Light themes (White Slur, Gruvbox, Windows XP, Classic)",
         )
 
-        st.markdown("<br><div class='card-title'>â±ï¸ Monitoring Parameters</div>", unsafe_allow_html=True)
+        clock_icon = icon_html("clock", extra_classes="accent-yellow")
+        st.markdown(f"<br><div class='card-title'>{clock_icon} Monitoring Parameters</div>", unsafe_allow_html=True)
         current_interval = int(st.session_state.get("setting_refresh_interval", current_cfg.get("refresh_interval", 5)))
         intervals = [3, 5, 10, 15, 30]
         interval_idx = intervals.index(current_interval) if current_interval in intervals else 1
@@ -414,59 +442,64 @@ def render_settings_view():
             key="settings_enable_net",
         )
         enable_startup = st.checkbox(
-            "Enable Windows Registry Startup Auditing",
+            "Enable Startup Registry & File Auditing",
             value=current_cfg.get("enable_startup", True),
             key="settings_enable_startup",
         )
 
-        if st.button("ðŸ’¾ Save Preferences", key="btn_save_settings"):
-            new_theme = selected_theme.lower()
-            st.session_state["theme"] = new_theme
+        save_glyph = get_icon("save")
+        if st.button(f"{save_glyph} Save Preferences", key="btn_save_settings"):
+            new_theme_key = get_key_from_display_name(selected_display_theme)
+            st.session_state["theme"] = new_theme_key
             st.session_state["setting_refresh_interval"] = selected_interval
             st.session_state["setting_enable_net"] = enable_net
             st.session_state["setting_enable_startup"] = enable_startup
             save_settings({
-                "theme": new_theme,
+                "theme": new_theme_key,
                 "refresh_interval": selected_interval,
                 "auto_refresh_enabled": st.session_state.get("setting_auto_refresh_enabled", True),
                 "enable_net": enable_net,
                 "enable_startup": enable_startup,
             })
-            st.success("âœ… Preferences saved successfully! Theme and parameters updated.")
+            success_glyph = get_icon("success")
+            st.success(f"{success_glyph} Preferences saved successfully! Theme and parameters updated.")
             st.rerun()
 
         st.markdown("</div>", unsafe_allow_html=True)
 
     with col2:
+        db_icon = icon_html("database", extra_classes="accent-purple")
         st.markdown(
-            """
+            f"""
             <div class="cyber-card">
-                <div class="card-title">ðŸ—„ï¸ Database & Storage Maintenance</div>
+                <div class="card-title">{db_icon} Database & Storage Maintenance</div>
             """,
             unsafe_allow_html=True,
         )
         st.write(f"SQLite Database File: `{db.db_path}`")
         st.write(f"Application Version: `v{APP_VERSION}`")
-        st.write("JetBrains Mono Font: `Embedded Offline (Base64)`")
+        st.write("JetBrains Mono Nerd Font: `Bundled Offline (Base64)`")
 
-        if st.button("ðŸ§¹ Prune Historical Database Records", key="btn_prune_db"):
+        broom_glyph = get_icon("broom")
+        if st.button(f"{broom_glyph} Prune Historical Database Records", key="btn_prune_db"):
             db.prune_old_data(max_records=500)
-            st.success("Database pruned to latest 500 records.")
+            st.success(f"{get_icon('success')} Database pruned to latest 500 records.")
         st.markdown("</div>", unsafe_allow_html=True)
 
     from platforms import platform_adapter
+    info_icon = icon_html("info", extra_classes="accent-blue")
     st.markdown("<br>", unsafe_allow_html=True)
     st.markdown(
         f"""
         <div class="cyber-card">
-            <div class="card-title">â„¹ï¸ About AI RAT Detection Dashboard</div>
+            <div class="card-title">{info_icon} About AI RAT Detection Dashboard</div>
             <div style="margin-top: 10px; font-size: 0.85rem; line-height: 1.6;">
                 <div><b>Application:</b> AI RAT Detection Dashboard</div>
                 <div><b>Version:</b> v{APP_VERSION} (Production Release)</div>
                 <div><b>Active Platform:</b> {platform_adapter.platform_name.capitalize()} Platform Adapter</div>
                 <div><b>Architecture:</b> Unified Master Core with Decoupled Background Telemetry</div>
-                <div><b>Font Family:</b> JetBrains Mono (100% Offline Embedded Base64)</div>
-                <div><b>Theme Modes:</b> Dark (SOC Operations), Light (Professional Day), System Default</div>
+                <div><b>Typography:</b> JetBrains Mono Nerd Font (100% Offline Embedded Base64)</div>
+                <div><b>Theme Modes:</b> 8 Complete Palettes (Dark: Catppuccin, Dracula, Nord, Cyber | Light: White Slur, Gruvbox, Windows XP, Classic)</div>
                 <div style="margin-top: 8px; color: var(--text-muted); font-size: 0.78rem;">
                     Engineered for cross-platform defensive cyber security telemetry, anomaly detection, and RAT behavioral forensics.
                 </div>
@@ -475,4 +508,3 @@ def render_settings_view():
         """,
         unsafe_allow_html=True,
     )
-

@@ -1,4 +1,4 @@
-﻿"""
+"""
 AI RAT Detection Dashboard - Windows Platform Adapter
 Implements Windows-specific telemetry, registry inspection, GPU querying, and security sensors.
 """
@@ -22,7 +22,7 @@ class WindowsPlatformAdapter(BasePlatformAdapter):
     def __init__(self):
         self._gpu_cache: Dict[str, Any] = {
             "available": False,
-            "name": "Integrated / Not Detected",
+            "name": "Integrated / Standard Display Adapter",
             "utilization_percent": 0.0,
             "memory_total_mb": 0.0,
             "memory_used_mb": 0.0,
@@ -30,12 +30,21 @@ class WindowsPlatformAdapter(BasePlatformAdapter):
         }
         self._last_gpu_check = 0.0
         self._gpu_check_interval = 10.0  # 10s caching to avoid high CPU
+        self._gpu_updating = False
         self._nvidia_smi_path = shutil.which("nvidia-smi") or (
             r"C:\Windows\System32\nvidia-smi.exe"
             if os.path.exists(r"C:\Windows\System32\nvidia-smi.exe")
             else None
         )
         self._has_checked_smi = False
+        self._sensor_cache: Dict[str, Any] = {
+            "webcam_active": False,
+            "webcam_app": "None",
+            "mic_active": False,
+            "mic_app": "None",
+        }
+        self._last_sensor_check = 0.0
+        self._sensor_check_interval = 5.0  # 5s caching for registry queries
 
     @property
     def platform_name(self) -> str:
@@ -126,56 +135,56 @@ class WindowsPlatformAdapter(BasePlatformAdapter):
 
         return entries
 
+    def _query_nvidia_smi(self):
+        """Asynchronously updates GPU cache from nvidia-smi without blocking callers."""
+        try:
+            cmd = [
+                self._nvidia_smi_path,
+                "--query-gpu=name,utilization.gpu,memory.total,memory.used,driver_version",
+                "--format=csv,noheader,nounits",
+            ]
+            res = subprocess.run(
+                cmd,
+                capture_output=True,
+                text=True,
+                timeout=3,
+                creationflags=subprocess.CREATE_NO_WINDOW if sys.platform == "win32" else 0,
+            )
+            if res.returncode == 0 and res.stdout.strip():
+                parts = [p.strip() for p in res.stdout.strip().split(",")]
+                if len(parts) >= 5:
+                    self._gpu_cache = {
+                        "available": True,
+                        "name": parts[0],
+                        "utilization_percent": float(parts[1]) if parts[1].replace(".", "").isdigit() else 0.0,
+                        "memory_total_mb": float(parts[2]) if parts[2].replace(".", "").isdigit() else 0.0,
+                        "memory_used_mb": float(parts[3]) if parts[3].replace(".", "").isdigit() else 0.0,
+                        "driver_version": parts[4],
+                    }
+        except Exception:
+            pass
+        finally:
+            self._gpu_updating = False
+
     def get_gpu_metrics(self) -> Dict[str, Any]:
-        """Harvests GPU metrics with caching to minimize CPU consumption."""
+        """Harvests GPU metrics with non-blocking async updates and caching."""
         now = time.time()
-        if now - self._last_gpu_check < self._gpu_check_interval:
-            return self._gpu_cache
+        if now - self._last_gpu_check >= self._gpu_check_interval and not self._gpu_updating:
+            self._last_gpu_check = now
+            if self._nvidia_smi_path:
+                import threading
+                self._gpu_updating = True
+                threading.Thread(target=self._query_nvidia_smi, name="NvidiaSmiQueryThread", daemon=True).start()
 
-        self._last_gpu_check = now
-
-        if self._nvidia_smi_path:
-            try:
-                cmd = [
-                    self._nvidia_smi_path,
-                    "--query-gpu=name,utilization.gpu,memory.total,memory.used,driver_version",
-                    "--format=csv,noheader,nounits",
-                ]
-                res = subprocess.run(
-                    cmd,
-                    capture_output=True,
-                    text=True,
-                    timeout=2,
-                    creationflags=subprocess.CREATE_NO_WINDOW if sys.platform == "win32" else 0,
-                )
-                if res.returncode == 0 and res.stdout.strip():
-                    parts = [p.strip() for p in res.stdout.strip().split(",")]
-                    if len(parts) >= 5:
-                        self._gpu_cache = {
-                            "available": True,
-                            "name": parts[0],
-                            "utilization_percent": float(parts[1]) if parts[1].replace(".", "").isdigit() else 0.0,
-                            "memory_total_mb": float(parts[2]) if parts[2].replace(".", "").isdigit() else 0.0,
-                            "memory_used_mb": float(parts[3]) if parts[3].replace(".", "").isdigit() else 0.0,
-                            "driver_version": parts[4],
-                        }
-                        return self._gpu_cache
-            except Exception:
-                pass
-
-        # Fallback: integrated / standard GPU
-        self._gpu_cache = {
-            "available": False,
-            "name": "Integrated / Standard Display Adapter",
-            "utilization_percent": 0.0,
-            "memory_total_mb": 0.0,
-            "memory_used_mb": 0.0,
-            "driver_version": "N/A",
-        }
         return self._gpu_cache
 
     def get_security_sensors(self) -> Dict[str, Any]:
-        """Audits active microphone and webcam hardware sensors on Windows."""
+        """Audits active microphone and webcam hardware sensors on Windows with caching."""
+        now = time.time()
+        if now - self._last_sensor_check < self._sensor_check_interval and self._last_sensor_check > 0.0:
+            return self._sensor_cache
+
+        self._last_sensor_check = now
         webcam_active = False
         mic_active = False
         webcam_app = "None"
@@ -242,10 +251,11 @@ class WindowsPlatformAdapter(BasePlatformAdapter):
         except Exception:
             pass
 
-        return {
+        self._sensor_cache = {
             "webcam_active": webcam_active,
             "webcam_app": webcam_app,
             "mic_active": mic_active,
             "mic_app": mic_app,
         }
+        return self._sensor_cache
 

@@ -234,7 +234,7 @@ class ReportService:
         # 6. Defensive Recommendations
         recs = evaluation.get("recommendations", [])
         elements.append(Paragraph("Defensive Security Recommendations", h2_style))
-        rec_data = [[Paragraph(f"✓  {rc}", body_style)] for rc in recs]
+        rec_data = [[Paragraph(f"&bull;  {rc}", body_style)] for rc in recs]
         rec_table = Table(rec_data, colWidths=[520])
         rec_table.setStyle(TableStyle([
             ("BACKGROUND", (0, 0), (-1, -1), colors.HexColor("#f0fdf4")),

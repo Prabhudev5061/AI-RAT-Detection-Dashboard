@@ -5,6 +5,7 @@ utilizing centralized Nerd Font icons and modular themes.
 """
 
 import streamlit as st
+import streamlit.components.v1 as components
 from config.config import APP_VERSION, load_settings, save_settings
 from utils.permissions import is_admin
 from ui.icons import get_icon, icon_html
@@ -31,6 +32,42 @@ NAV_ICONS = {
 def render_sidebar() -> str:
     """Renders the modular SOC sidebar and returns the selected navigation view."""
     with st.sidebar:
+        # Accessibility Metadata & Tooltip Attributes Injection
+        components.html(
+            """
+            <script>
+            (function() {
+                function setA11yLabels() {
+                    try {
+                        const doc = window.parent.document;
+                        const c = doc.querySelector('[data-testid="stSidebarCollapseButton"] button');
+                        if (c) {
+                            if (!c.getAttribute('title')) c.setAttribute('title', 'Collapse sidebar');
+                            if (!c.getAttribute('aria-label')) c.setAttribute('aria-label', 'Collapse sidebar');
+                        }
+                        const e = doc.querySelector('[data-testid="stExpandSidebarButton"], [data-testid="stSidebarCollapsedControl"] button');
+                        if (e) {
+                            if (!e.getAttribute('title')) e.setAttribute('title', 'Expand sidebar');
+                            if (!e.getAttribute('aria-label')) e.setAttribute('aria-label', 'Expand sidebar');
+                        }
+                    } catch(err) {}
+                }
+                setA11yLabels();
+                try {
+                    const doc = window.parent.document;
+                    if (!window.parent.__sidebarObserverAttached) {
+                        window.parent.__sidebarObserverAttached = true;
+                        const observer = new MutationObserver(setA11yLabels);
+                        observer.observe(doc.body, { childList: true, subtree: true });
+                    }
+                } catch(err) {}
+            })();
+            </script>
+            """,
+            height=0,
+            width=0,
+        )
+
         # 1. Branding Header
         shield_icon = icon_html("shield", extra_styles="font-size: 1.35rem; color: #ffffff;")
         st.markdown(

@@ -31,6 +31,20 @@ import reportlab.lib.colors
 import reportlab.platypus
 import reportlab.pdfgen
 
+# Hide console immediately on Windows before importing heavy libraries
+def hide_console_window():
+    """Hides the console window on Windows to prevent terminal flicker during desktop launch."""
+    if sys.platform == "win32":
+        try:
+            import ctypes
+            hwnd = ctypes.windll.kernel32.GetConsoleWindow()
+            if hwnd:
+                ctypes.windll.user32.ShowWindow(hwnd, 0)
+        except Exception:
+            pass
+
+hide_console_window()
+
 # Guard against NoneType stdout/stderr in Windows GUI/noconsole mode
 if sys.stdout is None:
     sys.stdout = open(os.devnull, "w", encoding="utf-8")
@@ -105,7 +119,9 @@ def start_streamlit_server(port: int):
             if opt == "global.developmentMode":
                 return False
             return _orig_get_option(opt)
-        _st_config.get_option = _safe_get_option
+        _st_config.set_option("server.port", port)
+        _st_config.set_option("server.address", "127.0.0.1")
+        _st_config.set_option("browser.serverPort", port)
     except Exception:
         pass
 
@@ -119,11 +135,14 @@ def start_streamlit_server(port: int):
         "server.enableCORS": False,
         "server.enableXsrfProtection": False,
         "global.developmentMode": False,
+        "client.showErrorDetails": False,
+        "client.toolbarMode": "minimal",
     }
 
     from streamlit.web import bootstrap
     logger.info(f"Starting Streamlit engine on 127.0.0.1:{port}...")
-    bootstrap.run(APP_SCRIPT, is_hello=False, args=[], flag_options=flag_options)
+    bootstrap.run(APP_SCRIPT, is_hello=False, args=[f"--server.port={port}"], flag_options=flag_options)
+
 
 
 def wait_for_server(port: int, timeout: float = 30.0) -> bool:
@@ -179,6 +198,9 @@ def launch_browser_fallback(url: str):
 
 def main():
     """Main desktop application entrypoint."""
+    # Hide terminal/console window on Windows
+    hide_console_window()
+
     # Ensure working directory is correct
     os.chdir(str(BUNDLE_DIR))
 
@@ -210,6 +232,14 @@ def main():
     # Launch Desktop Webview
     try:
         import webview
+        from config.config import load_settings
+        from ui.themes.manager import get_theme, normalize_theme_key
+
+        saved_cfg = load_settings()
+        theme_key = normalize_theme_key(saved_cfg.get("theme", "cyber_dark"))
+        window_bg = get_theme(theme_key).background
+        if window_bg.startswith("rgba"):
+            window_bg = "#f8fafc"
 
         logger.info("Initializing native desktop window container...")
         window = webview.create_window(
@@ -218,7 +248,7 @@ def main():
             width=1366,
             height=850,
             min_size=(1024, 680),
-            background_color="#0b0f19",
+            background_color=window_bg,
             easy_drag=False,
         )
 

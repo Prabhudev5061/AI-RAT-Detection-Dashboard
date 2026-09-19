@@ -1,4 +1,4 @@
-﻿"""
+"""
 AI RAT Detection Dashboard - System Monitor
 Collects real-time CPU, RAM, Disk, GPU, process metrics, and host user context.
 """

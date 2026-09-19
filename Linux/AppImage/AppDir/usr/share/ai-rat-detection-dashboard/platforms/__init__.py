@@ -1,4 +1,4 @@
-﻿"""
+"""
 AI RAT Detection Dashboard - Platform Abstraction Package
 Exposes uniform platform adapter regardless of whether running on Windows or Linux.
 """

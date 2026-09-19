@@ -1,4 +1,4 @@
-﻿"""
+"""
 AI RAT Detection Dashboard - Linux Platform Adapter
 Implements Linux-specific telemetry, XDG autostart inspection, sysfs GPU metrics, and rootless sensors.
 """

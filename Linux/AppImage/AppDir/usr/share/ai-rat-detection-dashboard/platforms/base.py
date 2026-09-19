@@ -1,4 +1,4 @@
-﻿"""
+"""
 AI RAT Detection Dashboard - Base Platform Adapter
 Abstract interface defining platform-specific hardware and OS telemetry collection.
 """

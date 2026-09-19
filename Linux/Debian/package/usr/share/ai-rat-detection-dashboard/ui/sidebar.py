@@ -1,34 +1,91 @@
 """
 AI-RAT-Detection-Dashboard - Sidebar Navigation Component
-Renders sidebar navigation, brand logo, operational status, and global controls.
+Renders sidebar navigation, brand logo, operational status, and global controls
+utilizing centralized Nerd Font icons and modular themes.
 """
 
 import streamlit as st
+import streamlit.components.v1 as components
 from config.config import APP_VERSION, load_settings, save_settings
 from utils.permissions import is_admin
+from ui.icons import get_icon, icon_html
+from ui.themes.manager import (
+    get_theme,
+    get_theme_names_list,
+    get_key_from_display_name,
+    normalize_theme_key,
+)
+
+# Icon mapping for main navigation menu
+NAV_ICONS = {
+    "Dashboard": "dashboard",
+    "Live Monitor": "pulse",
+    "Process Analysis": "process",
+    "Network Monitor": "network",
+    "Security Tools": "shield",
+    "Event Logs": "history",
+    "Reports": "report",
+    "Settings": "settings",
+}
 
 
 def render_sidebar() -> str:
-    """Renders the dark SOC sidebar and returns the selected navigation view."""
+    """Renders the modular SOC sidebar and returns the selected navigation view."""
     with st.sidebar:
-        # Branding Header
-        st.markdown(
+        # Accessibility Metadata & Tooltip Attributes Injection
+        components.html(
             """
+            <script>
+            (function() {
+                function setA11yLabels() {
+                    try {
+                        const doc = window.parent.document;
+                        const c = doc.querySelector('[data-testid="stSidebarCollapseButton"] button');
+                        if (c) {
+                            if (!c.getAttribute('title')) c.setAttribute('title', 'Collapse sidebar');
+                            if (!c.getAttribute('aria-label')) c.setAttribute('aria-label', 'Collapse sidebar');
+                        }
+                        const e = doc.querySelector('[data-testid="stExpandSidebarButton"], [data-testid="stSidebarCollapsedControl"] button');
+                        if (e) {
+                            if (!e.getAttribute('title')) e.setAttribute('title', 'Expand sidebar');
+                            if (!e.getAttribute('aria-label')) e.setAttribute('aria-label', 'Expand sidebar');
+                        }
+                    } catch(err) {}
+                }
+                setA11yLabels();
+                try {
+                    const doc = window.parent.document;
+                    if (!window.parent.__sidebarObserverAttached) {
+                        window.parent.__sidebarObserverAttached = true;
+                        const observer = new MutationObserver(setA11yLabels);
+                        observer.observe(doc.body, { childList: true, subtree: true });
+                    }
+                } catch(err) {}
+            })();
+            </script>
+            """,
+            height=0,
+            width=0,
+        )
+
+        # 1. Branding Header
+        shield_icon = icon_html("shield", extra_styles="font-size: 1.35rem; color: #ffffff;")
+        st.markdown(
+            f"""
             <div style="display:flex; align-items:center; gap:12px; margin-bottom:1.5rem; padding: 0 4px;">
                 <div style="
-                    background: linear-gradient(135deg, #0284c7, #38bdf8);
-                    width: 38px; height: 38px; border-radius: 8px;
+                    background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+                    width: 40px; height: 40px; border-radius: 9px;
                     display: flex; align-items: center; justify-content: center;
-                    box-shadow: 0 0 14px rgba(56, 189, 248, 0.4);
-                    font-size: 1.2rem;
+                    box-shadow: 0 0 14px rgba(56, 189, 248, 0.35);
                 ">
-                    🛡️
+                    {shield_icon}
                 </div>
                 <div>
-                    <div style="font-weight:700; font-size:1.02rem; color:#f8fafc; letter-spacing: -0.3px;">
+                    <div style="font-weight:700; font-size:1.02rem; color:var(--text-primary); letter-spacing: -0.3px;">
                         AI RAT Detection Dashboard
                     </div>
-                    <div style="font-size:0.68rem; color:#94a3b8;">
+                    <div style="font-size:0.68rem; color:var(--text-muted);">
                         Real-Time Cyber Security Monitoring
                     </div>
                 </div>
@@ -37,26 +94,33 @@ def render_sidebar() -> str:
             unsafe_allow_html=True,
         )
 
-        # Admin Badge
+        # 2. Admin Privilege Badge
         admin_mode = is_admin()
-        badge_text = "🛡️ Elevated (Admin)" if admin_mode else "⚠️ Standard User"
-        badge_color = "#34d399" if admin_mode else "#facc15"
+        if admin_mode:
+            badge_icon = icon_html("admin", extra_styles="font-size:0.85rem;")
+            badge_text = f"{badge_icon} Elevated (Admin)"
+            badge_color = "var(--accent-green)"
+        else:
+            badge_icon = icon_html("warning", extra_styles="font-size:0.85rem;")
+            badge_text = f"{badge_icon} Standard User"
+            badge_color = "var(--accent-yellow)"
+
         st.markdown(
             f"""
             <div style="
-                background: #111827; border: 1px solid #1f293d;
+                background: var(--card-bg); border: 1px solid var(--card-border);
                 border-radius: 6px; padding: 6px 10px; margin-bottom: 1.2rem;
                 font-size: 0.75rem; color: {badge_color}; font-weight: 600;
                 display: flex; justify-content: space-between; align-items: center;
             ">
-                <span>Privilege Mode</span>
-                <span>{badge_text}</span>
+                <span style="color:var(--text-secondary);">Privilege Mode</span>
+                <span style="display:flex; align-items:center; gap:5px;">{badge_text}</span>
             </div>
             """,
             unsafe_allow_html=True,
         )
 
-        # Navigation Menu
+        # 3. Navigation Menu with Nerd Font Icons
         menu_options = [
             "Dashboard",
             "Live Monitor",
@@ -68,49 +132,80 @@ def render_sidebar() -> str:
             "Settings",
         ]
 
+        def format_nav_item(item: str) -> str:
+            icon_key = NAV_ICONS.get(item, "circle")
+            glyph = get_icon(icon_key)
+            return f"{glyph}  {item}"
+
+        query_page = st.query_params.get("page")
+        if query_page:
+            clean_qp = query_page.lower().replace("_", " ").strip()
+            for opt in menu_options:
+                if opt.lower().strip() == clean_qp:
+                    if st.session_state.get("main_nav_radio") != opt:
+                        st.session_state["main_nav_radio"] = opt
+                    break
+
         selected_page = st.radio(
             "Navigation",
             options=menu_options,
+            format_func=format_nav_item,
             label_visibility="collapsed",
             key="main_nav_radio",
         )
 
         st.markdown("<hr style='border-color: var(--sidebar-border); margin: 1rem 0 0.8rem 0;'>", unsafe_allow_html=True)
 
-        # Theme Selector
-        theme_options = ["Dark", "Light", "System"]
-        current_theme = st.session_state.get("theme", "dark").capitalize()
-        theme_idx = theme_options.index(current_theme) if current_theme in theme_options else 0
+        # 4. Advanced Grouped Theme Selector
+        theme_names = get_theme_names_list()
+        current_theme_key = normalize_theme_key(st.session_state.get("theme", "cyber_dark"))
+        current_theme_tokens = get_theme(current_theme_key)
+        current_display_name = current_theme_tokens.name
+
+        theme_idx = theme_names.index(current_display_name) if current_display_name in theme_names else 0
 
         def on_theme_change():
-            new_val = st.session_state.get("ui_theme_selector", "Dark").lower()
-            st.session_state["theme"] = new_val
+            chosen_name = st.session_state.get("ui_theme_selector", "Cyber Dark")
+            new_key = get_key_from_display_name(chosen_name)
+            st.session_state["theme"] = new_key
             cfg = load_settings()
-            cfg["theme"] = new_val
+            cfg["theme"] = new_key
             save_settings(cfg)
 
+        palette_icon = icon_html("palette", extra_styles="color:var(--accent-blue); font-size:0.95rem; margin-right:6px;")
+        st.markdown(
+            f"""
+            <div style="font-size:0.82rem; font-weight:600; color:var(--text-secondary); margin-bottom:4px; display:flex; align-items:center;">
+                {palette_icon} UI Theme
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
         st.selectbox(
-            "🎨 UI Theme",
-            options=theme_options,
+            "UI Theme",
+            options=theme_names,
             index=theme_idx,
             key="ui_theme_selector",
             on_change=on_theme_change,
-            help="Switch between Dark, Light, or System default theme",
+            label_visibility="collapsed",
+            help="Switch between Dark (Catppuccin, Dracula, Nord, Cyber) and Light (White Slur, Gruvbox, Windows XP, Classic) themes",
         )
 
-        # Live Feed Toggle
-        st.toggle("⚡ Live Auto-Refresh", value=True, key="setting_auto_refresh_enabled", help="Toggle background telemetry updates")
+        # 5. Live Feed Toggle
+        bolt_glyph = get_icon("bolt")
+        st.toggle(f"{bolt_glyph} Live Auto-Refresh", key="setting_auto_refresh_enabled", help="Toggle background telemetry updates")
 
         st.markdown("<hr style='border-color: var(--sidebar-border); margin: 0.8rem 0 1rem 0;'>", unsafe_allow_html=True)
 
-        # Bottom System Status
+        # 6. Bottom System Status Indicator
+        status_dot = icon_html("dot", extra_styles="color:var(--accent-green); font-size:0.65rem;")
         st.markdown(
             f"""
             <div style="padding: 0 4px;">
-                <div style="display:flex; align-items:center; gap:8px; font-size:0.82rem; color:#34d399; font-weight:600;">
-                    <span style="font-size:0.6rem;">🟢</span> AI Protection Active
+                <div style="display:flex; align-items:center; gap:8px; font-size:0.82rem; color:var(--accent-green); font-weight:600;">
+                    {status_dot} AI Protection Active
                 </div>
-                <div style="font-size:0.72rem; color:#64748b; margin-top:4px;">
+                <div style="font-size:0.72rem; color:var(--text-muted); margin-top:4px;">
                     Engine: Rule-Based Behavioral v{APP_VERSION}
                 </div>
             </div>
