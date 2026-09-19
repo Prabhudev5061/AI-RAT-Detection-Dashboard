@@ -163,15 +163,32 @@ def test_white_slur_theme_translucency():
 
 
 def test_windows_xp_theme_styling():
-    """Verifies Windows XP Luna desktop blue and classic panels."""
+    """Verifies Windows XP Luna desktop blue, glossy card headers, sidebar task pane gradient, and theme isolation."""
     xp = get_theme("windows_xp")
     assert xp.name == "Windows XP Light"
     assert xp.accent_blue == "#0055ea"
     assert xp.surface == "#ece9d8"
+    assert xp.background == "#ece9d8"
+    assert xp.card == "#ffffff"
+    assert xp.card_border == "#0055ea"
 
     css = get_theme_css("windows_xp")
     assert "--accent-blue: #0055ea;" in css
     assert "--sidebar-bg: #ece9d8;" in css
+    # Verify Luna blue gradients and authentic XP rules
+    assert "linear-gradient(180deg, #3d88f6 0%, #1664e8 50%, #004ecc 100%)" in css
+    assert "linear-gradient(180deg, #dbe6fe 0%, #d8e5fe 50%, #eaf0fd 100%)" in css
+    assert "linear-gradient(180deg, #2b77f9 0%, #1562e8 50%, #0050d8 100%)" in css
+    assert ".dashboard-header-banner" in css
+    assert ".metric-card" in css
+    assert ".chart-card-header" in css
+
+    # Isolation check: Ensure other 7 themes do NOT contain Windows XP custom overrides
+    other_themes = ["catppuccin_dark", "dracula_dark", "nord_dark", "cyber_dark", "white_slur", "gruvbox_light", "classic_light"]
+    for other_key in other_themes:
+        other_css = get_theme_css(other_key)
+        assert "Windows XP Light Theme - Visual Reference Rebuild" not in other_css, f"Theme {other_key} leaked XP CSS"
+        assert "linear-gradient(180deg, #dbe6fe 0%, #d8e5fe 50%, #eaf0fd 100%)" not in other_css
 
 
 def test_centralized_icons_mapping():

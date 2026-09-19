@@ -27,6 +27,8 @@ def _base_chart_layout(title: str = "", y_title: str = "%", y_range=None, theme:
             gridcolor=cfg["grid_color"],
             linecolor=cfg["border_color"],
             tickfont=dict(size=9, color=cfg["text_color"]),
+            tickangle=0,
+            nticks=6,
             fixedrange=True,
         ),
         yaxis=dict(
@@ -57,7 +59,18 @@ def render_history_charts(recent_metrics: List[Dict[str, Any]], theme: str = "cy
     active_theme = st.session_state.get("theme", theme)
     cfg = get_plotly_theme_config(active_theme)
 
-    timestamps = [m.get("timestamp", "")[-8:] for m in recent_metrics] or ["00:00:00"]
+    timestamps = []
+    for m in recent_metrics:
+        ts = str(m.get("timestamp", ""))
+        if len(ts) >= 16 and " " in ts:
+            timestamps.append(ts.split(" ")[1][:5])
+        elif len(ts) >= 8:
+            timestamps.append(ts[-8:-3] if ":" in ts[-8:-3] else ts[-5:])
+        else:
+            timestamps.append(ts or "00:00")
+    if not timestamps:
+        timestamps = ["00:00"]
+
     cpu_vals = [m.get("cpu_percent", 0.0) for m in recent_metrics] or [0.0]
     ram_vals = [m.get("memory_percent", 0.0) for m in recent_metrics] or [0.0]
     disk_vals = [m.get("disk_percent", 0.0) for m in recent_metrics] or [0.0]
@@ -79,7 +92,7 @@ def render_history_charts(recent_metrics: List[Dict[str, Any]], theme: str = "cy
     with col1:
         st.markdown(
             f"""
-            <div style="font-size:0.84rem; font-weight:600; color:var(--text-secondary); margin-bottom:4px; display:flex; align-items:center; gap:6px;">
+            <div class="chart-card-header">
                 {icon_html('chart_line', extra_styles=f'color:{cfg["accent_blue"]}; font-size:0.92rem;')} CPU Usage History
             </div>
             """,
@@ -102,7 +115,7 @@ def render_history_charts(recent_metrics: List[Dict[str, Any]], theme: str = "cy
     with col2:
         st.markdown(
             f"""
-            <div style="font-size:0.84rem; font-weight:600; color:var(--text-secondary); margin-bottom:4px; display:flex; align-items:center; gap:6px;">
+            <div class="chart-card-header">
                 {icon_html('chart_bar', extra_styles=f'color:{cfg["accent_purple"]}; font-size:0.92rem;')} RAM Usage History
             </div>
             """,
@@ -125,7 +138,7 @@ def render_history_charts(recent_metrics: List[Dict[str, Any]], theme: str = "cy
     with col3:
         st.markdown(
             f"""
-            <div style="font-size:0.84rem; font-weight:600; color:var(--text-secondary); margin-bottom:4px; display:flex; align-items:center; gap:6px;">
+            <div class="chart-card-header">
                 {icon_html('disk', extra_styles=f'color:{cfg["accent_yellow"]}; font-size:0.92rem;')} Disk Usage History
             </div>
             """,
@@ -148,7 +161,7 @@ def render_history_charts(recent_metrics: List[Dict[str, Any]], theme: str = "cy
     with col4:
         st.markdown(
             f"""
-            <div style="font-size:0.84rem; font-weight:600; color:var(--text-secondary); margin-bottom:4px; display:flex; align-items:center; gap:6px;">
+            <div class="chart-card-header">
                 {icon_html('network', extra_styles=f'color:{cfg["accent_blue"]}; font-size:0.92rem;')} Network Usage (KB/s)
             </div>
             """,

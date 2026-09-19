@@ -486,6 +486,89 @@ def generate_theme_css(theme_key: str, fonts_css: str = "") -> str:
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
     }}
 
+    /* Dashboard Top Header Banner Container */
+    .dashboard-header-container {{
+        margin-bottom: 1.2rem;
+    }}
+
+    .dashboard-header-banner {{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 12px;
+    }}
+
+    .dashboard-header-title-box {{
+        display: flex;
+        align-items: center;
+    }}
+
+    .dashboard-header-shield {{
+        display: none;
+    }}
+
+    .dashboard-header-title {{
+        margin: 0;
+        font-size: 1.65rem;
+        font-weight: 800;
+        color: var(--text-primary);
+        letter-spacing: -0.5px;
+        font-family: 'JetBrainsMono Nerd Font', 'JetBrains Mono', sans-serif;
+    }}
+
+    .dashboard-header-status-box {{
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }}
+
+    .dashboard-pill-updated {{
+        background: var(--card-bg);
+        border: 1px solid var(--card-border);
+        border-radius: 8px;
+        padding: 6px 12px;
+        font-size: 0.75rem;
+        color: var(--text-secondary);
+        font-family: 'JetBrainsMono Nerd Font', 'JetBrains Mono', monospace;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }}
+
+    .dashboard-pill-time {{
+        color: var(--text-primary);
+    }}
+
+    .dashboard-pill-active {{
+        background: var(--badge-safe-bg);
+        border: 1px solid var(--badge-safe-border);
+        border-radius: 8px;
+        padding: 6px 12px;
+        font-size: 0.75rem;
+        color: var(--badge-safe-text);
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }}
+
+    .dashboard-header-subtitle {{
+        font-size: 0.82rem;
+        color: var(--text-muted);
+        margin-top: 2px;
+    }}
+
+    .chart-card-header {{
+        font-size: 0.84rem;
+        font-weight: 600;
+        color: var(--text-secondary);
+        margin-bottom: 4px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }}
+
     /* Modular Cyber Card Container */
     .cyber-card {{
         background: var(--card-bg);

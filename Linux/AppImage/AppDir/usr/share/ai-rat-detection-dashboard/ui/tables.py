@@ -26,7 +26,7 @@ def render_top_processes_card(top_processes: List[Dict[str, Any]]):
         f"<div class='card-title'>{proc_icon} Top Active Processes</div>"
         "<div class='card-subtitle'>Real-time list of the most CPU-intensive processes</div>"
         "<table class='cyber-table'>"
-        "<thead><tr><th style='width:38%;'>Process</th><th style='width:20%;'>PID</th><th style='width:21%;'>CPU (%)</th><th style='width:21%;'>Memory (%)</th></tr></thead>"
+        "<thead><tr><th style='width:34%;'>Process</th><th style='width:18%;'>PID</th><th style='width:22%;'>CPU (%)</th><th style='width:26%;'>Memory (%)</th></tr></thead>"
         f"<tbody>{rows_html}</tbody>"
         "</table>"
         "</div>"

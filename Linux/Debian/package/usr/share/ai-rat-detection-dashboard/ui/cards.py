@@ -39,7 +39,7 @@ def create_sparkline(data_points: List[float], color: str) -> go.Figure:
     ))
 
     fig.update_layout(
-        height=45,
+        height=55,
         margin=dict(l=0, r=0, t=0, b=0),
         xaxis=dict(visible=False, fixedrange=True),
         yaxis=dict(visible=False, fixedrange=True),
@@ -72,7 +72,7 @@ def render_metric_cards(
         cpu_icon = icon_html("cpu", extra_classes="accent-blue", extra_styles="font-size:1.1rem;")
         st.markdown(
             f"""
-            <div class="cyber-card" style="margin-bottom: 0px;">
+            <div class="cyber-card metric-card metric-cpu" style="margin-bottom: 0px;">
                 <div class="card-title-row">
                     <span class="card-title">{cpu_icon} CPU Usage</span>
                 </div>
@@ -90,7 +90,7 @@ def render_metric_cards(
         ram_icon = icon_html("memory", extra_classes="accent-purple", extra_styles="font-size:1.1rem;")
         st.markdown(
             f"""
-            <div class="cyber-card" style="margin-bottom: 0px;">
+            <div class="cyber-card metric-card metric-ram" style="margin-bottom: 0px;">
                 <div class="card-title-row">
                     <span class="card-title">{ram_icon} RAM Usage</span>
                 </div>
@@ -108,7 +108,7 @@ def render_metric_cards(
         disk_icon = icon_html("disk", extra_classes="accent-yellow", extra_styles="font-size:1.1rem;")
         st.markdown(
             f"""
-            <div class="cyber-card" style="margin-bottom: 0px;">
+            <div class="cyber-card metric-card metric-disk" style="margin-bottom: 0px;">
                 <div class="card-title-row">
                     <span class="card-title">{disk_icon} Disk Usage</span>
                 </div>
@@ -126,7 +126,7 @@ def render_metric_cards(
         proc_icon = icon_html("process", extra_classes="accent-green", extra_styles="font-size:1.1rem;")
         st.markdown(
             f"""
-            <div class="cyber-card" style="margin-bottom: 0px;">
+            <div class="cyber-card metric-card metric-proc" style="margin-bottom: 0px;">
                 <div class="card-title-row">
                     <span class="card-title">{proc_icon} Total Processes</span>
                 </div>

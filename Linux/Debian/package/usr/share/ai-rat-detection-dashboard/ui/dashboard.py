@@ -36,44 +36,33 @@ from utils.formatting import get_severity_badge_html, get_risk_badge_html
 
 def render_dashboard_header(last_updated: str, refresh_interval: int):
     """Renders the top title banner and status pills matching the reference image."""
-    col_title, col_status = st.columns([3, 2])
-    with col_title:
-        st.markdown(
-            f"""
-            <div style="margin-bottom: 1.2rem;">
-                <h2 style="margin:0; font-size:1.65rem; font-weight:800; color:var(--text-primary); letter-spacing:-0.5px;">
-                    {APP_TITLE}
-                </h2>
-                <div style="font-size:0.82rem; color:var(--text-muted); margin-top:2px;">
-                    {APP_SUBTITLE}
+    shield_glyph = icon_html("shield", extra_classes="dashboard-header-shield-icon", extra_styles="font-size:1.35rem;")
+    clock_glyph = icon_html("clock", extra_classes="accent-blue", extra_styles="font-size:0.85rem;")
+    dot_glyph = icon_html("dot", extra_styles="color:var(--badge-safe-text); font-size:0.65rem;")
+    st.markdown(
+        f"""
+        <div class="dashboard-header-container">
+            <div class="dashboard-header-banner">
+                <div class="dashboard-header-title-box">
+                    <span class="dashboard-header-shield">{shield_glyph}</span>
+                    <span class="dashboard-header-title">{APP_TITLE}</span>
+                </div>
+                <div class="dashboard-header-status-box">
+                    <div class="dashboard-pill-updated">
+                        {clock_glyph} Last Updated: <b class="dashboard-pill-time">{last_updated}</b>
+                    </div>
+                    <div class="dashboard-pill-active">
+                        {dot_glyph} AI Engine Active | {refresh_interval}s
+                    </div>
                 </div>
             </div>
-            """,
-            unsafe_allow_html=True,
-        )
-    with col_status:
-        clock_glyph = icon_html("clock", extra_classes="accent-blue", extra_styles="font-size:0.85rem;")
-        dot_glyph = icon_html("dot", extra_styles="color:var(--badge-safe-text); font-size:0.65rem;")
-        st.markdown(
-            f"""
-            <div style="display:flex; justify-content:flex-end; align-items:center; gap:12px; margin-top:6px;">
-                <div style="
-                    background:var(--card-bg); border:1px solid var(--card-border); border-radius:8px;
-                    padding:6px 12px; font-size:0.75rem; color:var(--text-secondary); font-family:'JetBrainsMono Nerd Font', 'JetBrains Mono', monospace;
-                ">
-                    {clock_glyph} Last Updated: <b style="color:var(--text-primary);">{last_updated}</b>
-                </div>
-                <div style="
-                    background:var(--badge-safe-bg); border:1px solid var(--badge-safe-border);
-                    border-radius:8px; padding:6px 12px; font-size:0.75rem; color:var(--badge-safe-text); font-weight:600;
-                    display:flex; align-items:center; gap:6px;
-                ">
-                    {dot_glyph} AI Engine Active | {refresh_interval}s
-                </div>
+            <div class="dashboard-header-subtitle">
+                {APP_SUBTITLE}
             </div>
-            """,
-            unsafe_allow_html=True,
-        )
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 
 
 def render_dashboard_view(data: Dict[str, Any], recent_metrics: List[Dict[str, Any]], refresh_interval: int):
